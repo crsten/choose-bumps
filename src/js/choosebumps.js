@@ -6,7 +6,7 @@
  *  License: MIT
  */
 
-function ChooseBumps(element,options){
+function ChooseBumps(element,options) {
 	if(this instanceof ChooseBumps === false) return new ChooseBumps(element,options);
 
 	let Element = null;
@@ -40,7 +40,7 @@ function ChooseBumps(element,options){
 		Element.setAttribute('tabindex',0);
 		renderHTML();
 		
-		setArgs.call(this,options);
+		setArgs.call(this,options || {});
 	}
 
 	function setPlaceholder(x) {
@@ -394,7 +394,7 @@ function ChooseBumps(element,options){
 	init.call(this);
 
 	function setArgs(opts) {
-        for(let key in defaults) this[key] = opts[key] || defaults[key];
+        for(let key in defaults) this[key] = (opts[key]) ? opts[key] : defaults[key] ;
     };
 
 	return Object.freeze(this);
