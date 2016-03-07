@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ChooseBumps - Demo</title>
+	<link rel="stylesheet" href="dist/choosebumps.css">
+
+	<style>
+		body{
+			min-height: 100vh;
+			margin:0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.container{
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			flex-wrap: wrap;
+			align-content: space-around;
+			width: 100%;
+			height: 100vh;
+		}
+
+		.container > div{
+			max-width: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div id="choosebumps"></div>
+		<div id="choosebumps-search"></div>
+		<div id="choosebumps-tag"></div>
+		<div id="choosebumps-tagsearch"></div>
+	</div>
+
+	<script src="dist/choosebumps.js"></script>
+
+	<script>
+		var content = [{
+				value: 1,
+				text: 'Luke Skywalker',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 2,
+				text: 'Anakin Skywalker',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 3,
+				text: 'Darth Vader',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 4,
+				text: 'Joffrey Baratheon',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 5,
+				text: 'Peter Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 6,
+				text: 'Ned Stark',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			}];
+	</script>
+
+	<script>
+		var cbSearch = ChooseBumps(document.getElementById('choosebumps-search'),{
+			items: content,
+			search:true,
+			searchfields: 'text',
+			placeholder: 'Search...',
+			selectedtemplate: '{{data.value}}',
+			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>'
+		});
+		var cbTag = ChooseBumps(document.getElementById('choosebumps-tag'),{
+			items: content,
+			multiple: true,
+			placeholder: 'Tag...',
+			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>',
+			tagtemplate: '{{data.text}}'
+		});
+		var cbTagSearch = ChooseBumps(document.getElementById('choosebumps-tagsearch'),{
+			items: content,
+			multiple: true,
+			search:true,
+			searchfields: 'text',
+			placeholder: 'TagSearch...',
+			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>'
+		});
+		var cb = ChooseBumps(document.getElementById('choosebumps'),{
+			items: content,
+			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>'
+		});
+	</script>
+</body>
+</html>
