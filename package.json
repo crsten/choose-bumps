@@ -5,8 +5,9 @@
   "scripts": {
     "commit": "git-cz",
     "test": "mocha src/js/choosebumps.test.js -w",
-    "single-test": "mocha src/js/choosebumps.test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "test:single": "mocha src/js/choosebumps.test.js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "postinstall": "gulp build"
   },
   "repository": {
     "type": "git",
