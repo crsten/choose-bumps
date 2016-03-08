@@ -3,36 +3,78 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ChooseBumps - Demo</title>
+	<link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="dist/choosebumps.css">
 
 	<style>
+		html{
+			font-family: 'Raleway';
+		}
 		body{
 			min-height: 100vh;
 			margin:0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
 		}
+
+		h1{
+			text-align: center;
+			padding: 1em;
+			font-size: 3em;
+			margin:0;
+			color: white;
+			background: #30323f;
+		}
+		h1 span{
+			font-size: .5em;
+			opacity: .5;
+		}
+
 		.container{
-			display: flex;
-			justify-content: space-around;
-			align-items: center;
-			flex-wrap: wrap;
-			align-content: space-around;
-			width: 100%;
-			height: 100vh;
+			height: 25vh;
+			padding: 2em;
+			display:-webkit-box;
+			display:-webkit-flex;
+			display:-ms-flexbox;
+			display:flex;
+			-webkit-box-orient: vertical;
+			-webkit-box-direction: normal;
+			-webkit-flex-direction: column;
+			-ms-flex-direction: column;
+			        flex-direction: column;
+			-webkit-box-align: center;
+			-webkit-align-items: center;
+			-ms-flex-align: center;
+			        align-items: center;
+			-webkit-box-pack: center;
+			-webkit-justify-content: center;
+			-ms-flex-pack: center;
+			        justify-content: center;
 		}
 
 		.container > div{
-			max-width: 300px;
+			max-width: 500px;
 		}
 	</style>
 </head>
 <body>
+	<h1>ChooseBumps<span> . js</span></h1>
+
 	<div class="container">
+		<h2>Default</h2>
 		<div id="choosebumps"></div>
+	</div>
+	
+	<div class="container">
+		<h2>Search</h2>
 		<div id="choosebumps-search"></div>
+	</div>
+
+	<div class="container">
+		<h2>Multiple</h2>
 		<div id="choosebumps-tag"></div>
+	</div>
+
+	<div class="container">
+		<h2>Multiple & Search</h2>
 		<div id="choosebumps-tagsearch"></div>
 	</div>
 
@@ -41,32 +83,37 @@
 	<script>
 		var content = [{
 				value: 1,
-				text: 'Luke Skywalker',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 2,
-				text: 'Anakin Skywalker',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 3,
-				text: 'Darth Vader',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 4,
-				text: 'Joffrey Baratheon',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 5,
 				text: 'Peter Griffin',
 				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
 			},
 			{
+				value: 2,
+				text: 'Lois Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 3,
+				text: 'Chris Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 4,
+				text: 'Meg(atron) Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 5,
+				text: 'Brian Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
 				value: 6,
-				text: 'Ned Stark',
+				text: 'Stewie Griffin',
+				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+			},
+			{
+				value: 7,
+				text: 'John Herbert',
 				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
 			}];
 	</script>
@@ -78,7 +125,10 @@
 			searchfields: 'text',
 			placeholder: 'Search...',
 			selectedtemplate: '{{data.value}}',
-			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>'
+			template: '<img src="{{data.img}}" style="vertical-align: sub;margin-right: 15px;"/><p style="display:inline;">{{data.text}}</p>',
+			onselect: function(item){
+				console.log(item);
+			}
 		});
 		var cbTag = ChooseBumps(document.getElementById('choosebumps-tag'),{
 			items: content,
