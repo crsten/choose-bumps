@@ -21,6 +21,7 @@ function ChooseBumps(element,options) {
 	let TagTemplate = null;
 	let SelectedTemplate = null;
 	let SelectedIndex = null;
+	let onSelect = null;
 	let Items = [];
 
 	let defaults = {
@@ -31,7 +32,8 @@ function ChooseBumps(element,options) {
 		multiple: false,
 		template: '{{data}}',
 		tagtemplate: null,
-		selectedtemplate: null
+		selectedtemplate: null,
+		onselect: null
 	};
 
 	function init() {
@@ -63,8 +65,6 @@ function ChooseBumps(element,options) {
 			document.addEventListener('click',setOpened);
 			focusSearch();
 			isOpen = true;
-
-			console.log('Opened');
 		}
 		else {
 			resetSearch();
@@ -72,8 +72,6 @@ function ChooseBumps(element,options) {
 			document.removeEventListener('click',setOpened);
 			SelectedIndex = null;
 			isOpen = false;
-
-			console.log('Close');
 		}
 	}
 
@@ -129,6 +127,7 @@ function ChooseBumps(element,options) {
 			setOpened(false);
 		}
 
+		if(onSelect) onSelect(item);
 		renderSelection();
 	}
 
@@ -246,7 +245,6 @@ function ChooseBumps(element,options) {
 		Element.appendChild(ItemContainer);
 		
 		Element.querySelector('.cb-main-item').addEventListener('click',(e) => {
-			console.log('Click: Element');
 			e.stopPropagation();
 			setOpened(!isOpen);
 		});
@@ -388,8 +386,36 @@ function ChooseBumps(element,options) {
 				if(typeof x === 'string') SearchFields = x;
 				else console.error('SearchFields must be a string.');
 			}
+		},
+		'onselect': {
+			get: () => onSelect,
+			set: (x) => {
+				if(typeof x === 'function') onSelect = x;
+				else if(!x) onSelect = null;
+			}
 		}
 	});
+
+	this.select = function Select(item) {
+		let match = Items.reduce((m,i) => m = isEquivalent(item,i) ? i : m,null);
+		if(match) selectItem(match);
+		
+		function isEquivalent(a, b) {
+			if(typeof a !== 'object' && typeof b !== 'object') return a === b;
+			let aProps = Object.getOwnPropertyNames(a);
+			let bProps = Object.getOwnPropertyNames(b);
+
+			if (aProps.length !== bProps.length) return false;
+
+			for (let i = 0; i < aProps.length; i++) {
+				let propName = aProps[i];
+
+				if(a[propName] !== b[propName]) return false;
+			}
+			return true;
+		}
+	};
+
 
 	init.call(this);
 

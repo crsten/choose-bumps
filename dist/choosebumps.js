@@ -23,6 +23,7 @@ function ChooseBumps(element, options) {
 	var TagTemplate = null;
 	var SelectedTemplate = null;
 	var SelectedIndex = null;
+	var onSelect = null;
 	var Items = [];
 
 	var defaults = {
@@ -33,7 +34,8 @@ function ChooseBumps(element, options) {
 		multiple: false,
 		template: '{{data}}',
 		tagtemplate: null,
-		selectedtemplate: null
+		selectedtemplate: null,
+		onselect: null
 	};
 
 	function init() {
@@ -42,7 +44,7 @@ function ChooseBumps(element, options) {
 		Element.setAttribute('tabindex', 0);
 		renderHTML();
 
-		setArgs.call(this, options);
+		setArgs.call(this, options || {});
 	}
 
 	function setPlaceholder(x) {
@@ -65,16 +67,12 @@ function ChooseBumps(element, options) {
 			document.addEventListener('click', setOpened);
 			focusSearch();
 			isOpen = true;
-
-			console.log('Opened');
 		} else {
 			resetSearch();
 			Element.classList.remove('cb-active');
 			document.removeEventListener('click', setOpened);
 			SelectedIndex = null;
 			isOpen = false;
-
-			console.log('Close');
 		}
 	}
 
@@ -129,6 +127,7 @@ function ChooseBumps(element, options) {
 			setOpened(false);
 		}
 
+		if (onSelect) onSelect(item);
 		renderSelection();
 	}
 
@@ -239,7 +238,6 @@ function ChooseBumps(element, options) {
 		Element.appendChild(ItemContainer);
 
 		Element.querySelector('.cb-main-item').addEventListener('click', function (e) {
-			console.log('Click: Element');
 			e.stopPropagation();
 			setOpened(!isOpen);
 		});
@@ -391,14 +389,44 @@ function ChooseBumps(element, options) {
 			set: function set(x) {
 				if (typeof x === 'string') SearchFields = x;else console.error('SearchFields must be a string.');
 			}
+		},
+		'onselect': {
+			get: function get() {
+				return onSelect;
+			},
+			set: function set(x) {
+				if (typeof x === 'function') onSelect = x;else if (!x) onSelect = null;
+			}
 		}
 	});
+
+	this.select = function Select(item) {
+		var match = Items.reduce(function (m, i) {
+			return m = isEquivalent(item, i) ? i : m;
+		}, null);
+		if (match) selectItem(match);
+
+		function isEquivalent(a, b) {
+			if ((typeof a === 'undefined' ? 'undefined' : _typeof(a)) !== 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) !== 'object') return a === b;
+			var aProps = Object.getOwnPropertyNames(a);
+			var bProps = Object.getOwnPropertyNames(b);
+
+			if (aProps.length !== bProps.length) return false;
+
+			for (var i = 0; i < aProps.length; i++) {
+				var propName = aProps[i];
+
+				if (a[propName] !== b[propName]) return false;
+			}
+			return true;
+		}
+	};
 
 	init.call(this);
 
 	function setArgs(opts) {
 		for (var key in defaults) {
-			this[key] = opts[key] || defaults[key];
+			this[key] = opts[key] ? opts[key] : defaults[key];
 		}
 	};
 
