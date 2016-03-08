@@ -252,9 +252,8 @@ var cb = ChooseBumps('#cb',{
 cb.select(4);
 ```
 
+---
 
-
-
-**Great shoutout to [Kent C. Dodds](https://github.com/kentcdodds) for providing great tutorials on (how to write an open source library)[https://egghead.io/series/how-to-write-an-open-source-javascript-library]**
+**Great shoutout to [Kent C. Dodds](https://github.com/kentcdodds) for providing great tutorials on [how to write an open source library](https://egghead.io/series/how-to-write-an-open-source-javascript-library)**
 
 
