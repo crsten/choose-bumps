@@ -51,6 +51,8 @@ $border: #ccc;
 	overflow-y: auto;
 	top:100%;
 	left: -1px;
+	z-index: 1;
+	background: white;
 	border-left: 1px solid $border;
 	border-top: 1px solid transparent;
 	border-right: 1px solid $border;
@@ -61,7 +63,7 @@ $border: #ccc;
 		cursor: default;
 
 		& + div{
-			border-top: 1px solid #f9f9f9;
+			border-top: 1px solid lighten($border,15%);
 		}
 
 		&:hover{
