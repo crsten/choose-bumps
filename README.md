@@ -9,6 +9,10 @@ A dropdown so simple it will give you choose-bumps! Written in pure vanillajs
 
 Have you ever wanted a simple dropdown library that doesn't depend on bloated frameworks? Well i did! Have fun :)
 
+##Demo
+
+You can find a small [demo here](http://crsten.github.io/choose-bumps/).
+
 ##Installation
 
 You can get it on npm.
