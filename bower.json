@@ -1,0 +1,31 @@
+{
+  "name": "choosebumps",
+  "description": "A dropdown so simple it will give you choose-bumps! Written in pure vanillajs",
+  "main": [
+    "src/js/choosebumps.js",
+    "src/style/choosebumps.scss"
+  ],
+  "authors": [
+    "car.jacobsen@gmail.com"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "dropdown",
+    "select",
+    "vanillajs",
+    "simple"
+  ],
+  "homepage": "https://github.com/crsten/choose-bumps",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
