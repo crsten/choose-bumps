@@ -291,7 +291,7 @@ function ChooseBumps(element,options) {
 	function renderItems(items) {
 		ItemContainer.innerHTML = '';
 		Items.forEach((item,index) => {
-			if(items && items.length && items.indexOf(item) < 0) return;
+			if(items && items.indexOf(item) < 0) return;
 			if(Multiple && Selected && Selected.indexOf(item) > -1 || !Multiple && Selected === item) return;
 			let option = document.createElement('div');
 				option.setAttribute('data-id', index);
