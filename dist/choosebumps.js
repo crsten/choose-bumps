@@ -256,12 +256,6 @@ function ChooseBumps(element, options) {
 			e.stopPropagation();
 			setOpened(!isOpen);
 		});
-
-		/*Element.addEventListener('focus',() => {
-  	if(!isOpen) {
-  		setOpened(true);
-  	}
-  });*/
 	}
 
 	function renderSelection() {
