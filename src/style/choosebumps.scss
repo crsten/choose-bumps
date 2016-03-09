@@ -49,6 +49,7 @@ $border: #ccc;
 	width: calc(100% + 2px);
 	max-height: 300px;
 	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
 	top:100%;
 	left: -1px;
 	z-index: 1;
