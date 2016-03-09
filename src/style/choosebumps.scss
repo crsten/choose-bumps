@@ -54,7 +54,7 @@ $border: #ccc;
 	z-index: 1;
 	background: white;
 	border-left: 1px solid $border;
-	border-top: 1px solid transparent;
+	border-top: 1px solid $border;
 	border-right: 1px solid $border;
 	border-bottom: 1px solid $border;
 

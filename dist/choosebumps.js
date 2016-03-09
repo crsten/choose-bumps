@@ -65,14 +65,34 @@ function ChooseBumps(element, options) {
 			renderItems();
 			Element.classList.add('cb-active');
 			document.addEventListener('click', setOpened);
+			document.addEventListener('keydown', ArrowNavigation);
 			focusSearch();
 			isOpen = true;
 		} else {
 			resetSearch();
 			Element.classList.remove('cb-active');
 			document.removeEventListener('click', setOpened);
+			document.removeEventListener('keydown', ArrowNavigation);
 			SelectedIndex = null;
 			isOpen = false;
+		}
+	}
+
+	function ArrowNavigation(e) {
+		if (new RegExp('38|40|13').test(e.keyCode)) e.preventDefault();
+		switch (e.keyCode) {
+			case 38:
+				e.preventDefault();
+				selectPrev();
+				break;
+			case 40:
+				e.preventDefault();
+				selectNext();
+				break;
+			case 13:
+				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)]);
+				SelectedIndex = null;
+				break;
 		}
 	}
 
@@ -98,10 +118,9 @@ function ChooseBumps(element, options) {
 	}
 
 	function selectPrev() {
-		if (SelectedIndex === null) SelectedIndex = -1;
 		var max = ItemContainer.children.length - 1;
 
-		SelectedIndex = SelectedIndex === 0 ? null : SelectedIndex - 1;
+		SelectedIndex = !SelectedIndex ? null : SelectedIndex - 1;
 		updateSelection();
 	}
 
@@ -149,29 +168,13 @@ function ChooseBumps(element, options) {
 			SearchBox.addEventListener('keyup', function KeyUp(e) {
 				if (new RegExp('38|40|13').test(e.keyCode) === false) {
 					renderItems(search(this.value));
-					if (!SelectedIndex) selectNext();
+					SelectedIndex = null;
+					selectNext();
 				}
 			});
 
 			SearchBox.addEventListener('keypress', function KeyPress() {
 				this.setAttribute('size', this.value.length + 1);
-			});
-
-			SearchBox.addEventListener('keydown', function KeyDown(e) {
-				switch (e.keyCode) {
-					case 38:
-						e.preventDefault();
-						selectPrev();
-						break;
-					case 40:
-						e.preventDefault();
-						selectNext();
-						break;
-					case 13:
-						selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)]);
-						SelectedIndex = null;
-						break;
-				}
 			});
 
 			Element.querySelector('.cb-main-item').appendChild(SearchBox);
@@ -250,18 +253,18 @@ function ChooseBumps(element, options) {
 	}
 
 	function renderSelection() {
+		if (!Selected) return;
 		var mainItem = Element.querySelector('.cb-main-item');
 
 		if (Multiple) {
 			[].slice.call(Element.querySelectorAll('.cb-main-item .cb-tag')).forEach(function (t) {
 				mainItem.removeChild(t);
 			});
-			if (!Selected) return;
 
 			Selected.forEach(function (item) {
 				var tag = document.createElement('div');
 				tag.className = 'cb-tag';
-				tag.innerHTML = parseTemplate(item, TagTemplate) + '<svg viewBox="0 0 512 512">\n\t\t\t\t\t\t<path d="m271 256l238-238c4-4 4-11 0-15c-4-4-11-4-15 0l-238 238l-238-238c-4-4-11-4-15 0c-4 4-4 11 0 15l238 238l-238 238c-4 4-4 11 0 15c2 2 5 3 8 3c2 0 5-1 7-3l238-238l238 238c2 2 5 3 7 3c3 0 6-1 8-3c4-4 4-11 0-15z"></path>\n\t\t\t\t\t</svg>';
+				tag.innerHTML = parseTemplate(item, TagTemplate || Template) + '<svg viewBox="0 0 512 512">\n\t\t\t\t\t\t<path d="m271 256l238-238c4-4 4-11 0-15c-4-4-11-4-15 0l-238 238l-238-238c-4-4-11-4-15 0c-4 4-4 11 0 15l238 238l-238 238c-4 4-4 11 0 15c2 2 5 3 8 3c2 0 5-1 7-3l238-238l238 238c2 2 5 3 7 3c3 0 6-1 8-3c4-4 4-11 0-15z"></path>\n\t\t\t\t\t</svg>';
 
 				tag.querySelector('svg').addEventListener('click', removeSelected.bind(null, item));
 
@@ -270,7 +273,7 @@ function ChooseBumps(element, options) {
 		} else {
 			var item = document.createElement('div');
 			item.className = 'cb-selected-item';
-			item.innerHTML = parseTemplate(Selected, SelectedTemplate);
+			item.innerHTML = parseTemplate(Selected, SelectedTemplate || Template);
 
 			var previousItem = Element.querySelector('.cb-selected-item');
 			if (previousItem) mainItem.removeChild(previousItem);
@@ -363,23 +366,35 @@ function ChooseBumps(element, options) {
 				return Template;
 			},
 			set: function set(x) {
-				if (typeof x === 'string') Template = x;else console.error('Template must be a string.');
+				if (typeof x === 'string') {
+					Template = x;
+					renderItems();
+					renderSelection();
+				} else console.error('Template must be a string.');
 			}
 		},
 		'tagtemplate': {
 			get: function get() {
-				return TagTemplate;
+				return TagTemplate || Template;
 			},
 			set: function set(x) {
-				if (typeof x === 'string') TagTemplate = x;else TagTemplate = Template;
+				if (typeof x === 'string') {
+					TagTemplate = x;
+					renderItems();
+					renderSelection();
+				}
 			}
 		},
 		'selectedtemplate': {
 			get: function get() {
-				return SelectedTemplate;
+				return SelectedTemplate || Template;
 			},
 			set: function set(x) {
-				if (typeof x === 'string') SelectedTemplate = x;else SelectedTemplate = Template;
+				if (typeof x === 'string') {
+					SelectedTemplate = x;
+					renderItems();
+					renderSelection();
+				}
 			}
 		},
 		'searchfields': {
