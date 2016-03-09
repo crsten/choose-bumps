@@ -62,6 +62,7 @@ function ChooseBumps(element,options) {
 		if(state === true) {
 			renderItems();
 			Element.classList.add('cb-active');
+			ItemContainer.scrollTop = 0;
 			document.addEventListener('click',setOpened);
 			document.addEventListener('keydown',ArrowNavigation);
 			focusSearch();
@@ -113,7 +114,7 @@ function ChooseBumps(element,options) {
         let max = ItemContainer.children.length - 1;
 
         SelectedIndex = (SelectedIndex < max) ? SelectedIndex + 1 : max;
-        updateSelection();
+        updateSelection();        
     }
 
     function selectPrev() {
@@ -123,11 +124,23 @@ function ChooseBumps(element,options) {
         updateSelection();
     }
 
+    function scrollSelectedIntoView() {
+		if(SelectedIndex === null) return;
+		let selectedItem = ItemContainer.children[SelectedIndex];
+		let containerTop = ItemContainer.scrollTop;
+		let containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
+		let selectedItemTop = selectedItem.offsetTop;
+		let selectedItemBottom = selectedItem.offsetTop + selectedItem.clientHeight; 
+		if(selectedItemTop < containerTop) ItemContainer.scrollTop = selectedItem.offsetTop;
+		else if(selectedItemBottom > containerBottom) ItemContainer.scrollTop = selectedItemBottom - ItemContainer.clientHeight;
+    }
+
     function updateSelection() {
         var oldSelection = ItemContainer.querySelector('.cb-selected');
         if(oldSelection) oldSelection.classList.remove('cb-selected');
         let el = ItemContainer.children[SelectedIndex];
         if(el) el.classList.add('cb-selected');
+        scrollSelectedIntoView();
     } 
 
 	function selectItem(item,event) {
