@@ -1,6 +1,8 @@
 # choose-bumps
 [![Build Status](https://travis-ci.org/crsten/choose-bumps.svg?branch=master&style=flat-square)](https://travis-ci.org/crsten/choose-bumps)
 [![npm](https://img.shields.io/npm/dt/choosebumps.svg?style=flat-square)](https://www.npmjs.com/package/choosebumps)
+[![Bower](https://img.shields.io/bower/v/choosebumps.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/v/choosebumps.svg?style=flat-square)](https://www.npmjs.com/package/choosebumps)
 [![npm](https://img.shields.io/npm/l/express.svg?style=flat-square)]()
 
 A dropdown so simple it will give you choose-bumps! Written in pure vanillajs
@@ -51,13 +53,13 @@ You can provide `options` to customize `choosebumps`. Here's an **overview of th
 ChooseBumps(element,{
   placeholder: 'Choose',
   items: [],
-	search: false,
-	searchfields: '',
-	multiple: false,
-	template: '{{data}}',
-	tagtemplate: null, //inherits from template if null
-	selectedtemplate: null, //inherits from template if null
-	onselect: null
+  search: false,
+  searchfields: '',
+  multiple: false,
+  template: '{{data}}',
+  tagtemplate: null, //inherits from template if null
+  selectedtemplate: null, //inherits from template if null
+  onselect: null
 });
 ```
 
