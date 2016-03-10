@@ -259,7 +259,7 @@ function ChooseBumps(element, options) {
 	}
 
 	function renderSelection() {
-		if (!Selected) return;
+
 		var mainItem = Element.querySelector('.cb-main-item');
 
 		if (Multiple) {
@@ -267,6 +267,7 @@ function ChooseBumps(element, options) {
 				mainItem.removeChild(t);
 			});
 
+			if (!Selected) return;
 			Selected.forEach(function (item) {
 				var tag = document.createElement('div');
 				tag.className = 'cb-tag';
@@ -277,6 +278,7 @@ function ChooseBumps(element, options) {
 				mainItem.insertBefore(tag, mainItem.children[mainItem.children.length - 1]);
 			});
 		} else {
+			if (!Selected) return;
 			var item = document.createElement('div');
 			item.className = 'cb-selected-item';
 			item.innerHTML = parseTemplate(Selected, SelectedTemplate || Template);
