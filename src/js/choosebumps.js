@@ -249,7 +249,7 @@ function ChooseBumps(element,options) {
 			MainItem.className = 'cb-main-item cb-placeholder trigger';
 
 
-		let Caret = `<svg class="cb-caret trigger" viewBox="0 0 512 512">
+		let Caret = `<svg class="cb-caret trigger" viewBox="0 0 512 512" height="20" width="20">
 						<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>
 					</svg>`;
 
