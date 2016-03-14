@@ -126,7 +126,7 @@ function ChooseBumps(element, options) {
 	}
 
 	function scrollSelectedIntoView() {
-		if (SelectedIndex === null) return;
+		if (!SelectedIndex || SelectedIndex < 0) return;
 		var selectedItem = ItemContainer.children[SelectedIndex];
 		var containerTop = ItemContainer.scrollTop;
 		var containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
@@ -240,10 +240,11 @@ function ChooseBumps(element, options) {
 	/* Rendering */
 
 	function renderHTML() {
+		//comment
 		var MainItem = document.createElement('div');
 		MainItem.className = 'cb-main-item cb-placeholder trigger';
 
-		var Caret = '<svg class="cb-caret trigger" viewBox="0 0 512 512">\n\t\t\t\t\t\t<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>\n\t\t\t\t\t</svg>';
+		var Caret = '<svg class="cb-caret trigger" viewBox="0 0 512 512" height="20" width="20">\n\t\t\t\t\t\t<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>\n\t\t\t\t\t</svg>';
 
 		MainItem.innerHTML += Caret;
 		Element.appendChild(MainItem);

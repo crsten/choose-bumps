@@ -125,7 +125,7 @@ function ChooseBumps(element,options) {
     }
 
     function scrollSelectedIntoView() {
-		if(SelectedIndex === null) return;
+		if(!SelectedIndex || SelectedIndex < 0) return;
 		let selectedItem = ItemContainer.children[SelectedIndex];
 		let containerTop = ItemContainer.scrollTop;
 		let containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
@@ -244,7 +244,7 @@ function ChooseBumps(element,options) {
 
 	/* Rendering */
 
-	function renderHTML() {
+	function renderHTML() { //comment
 		let MainItem = document.createElement('div');
 			MainItem.className = 'cb-main-item cb-placeholder trigger';
 
