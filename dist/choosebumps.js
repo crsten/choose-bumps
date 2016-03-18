@@ -19,6 +19,7 @@ function ChooseBumps(element, options) {
 	var SearchFields = null;
 	var Placeholder = null;
 	var Multiple = false;
+	var Categorize = null;
 	var Template = '';
 	var TagTemplate = null;
 	var SelectedTemplate = null;
@@ -35,6 +36,7 @@ function ChooseBumps(element, options) {
 		template: '{{data}}',
 		tagtemplate: null,
 		selectedtemplate: null,
+		categorize: null,
 		onselect: null
 	};
 
@@ -126,7 +128,7 @@ function ChooseBumps(element, options) {
 	}
 
 	function scrollSelectedIntoView() {
-		if (SelectedIndex === null) return;
+		if (!SelectedIndex || SelectedIndex < 0) return;
 		var selectedItem = ItemContainer.children[SelectedIndex];
 		var containerTop = ItemContainer.scrollTop;
 		var containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
@@ -240,10 +242,11 @@ function ChooseBumps(element, options) {
 	/* Rendering */
 
 	function renderHTML() {
+		//comment
 		var MainItem = document.createElement('div');
 		MainItem.className = 'cb-main-item cb-placeholder trigger';
 
-		var Caret = '<svg class="cb-caret trigger" viewBox="0 0 512 512">\n\t\t\t\t\t\t<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>\n\t\t\t\t\t</svg>';
+		var Caret = '<svg class="cb-caret trigger" viewBox="0 0 512 512" height="20" width="20">\n\t\t\t\t\t\t<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>\n\t\t\t\t\t</svg>';
 
 		MainItem.innerHTML += Caret;
 		Element.appendChild(MainItem);
@@ -291,6 +294,14 @@ function ChooseBumps(element, options) {
 
 	function renderItems(items) {
 		ItemContainer.innerHTML = '';
+
+		if (Categorize) Items = Items.sort(function (a, b) {
+			if (getPropertyByString(Categorize, a) < getPropertyByString(Categorize, b)) return -1;
+			if (getPropertyByString(Categorize, a) > getPropertyByString(Categorize, b)) return 1;
+			return 0;
+		});
+
+		var previousItem = null;
 		Items.forEach(function (item, index) {
 			if (items && items.indexOf(item) < 0) return;
 			if (Multiple && Selected && Selected.indexOf(item) > -1 || !Multiple && Selected === item) return;
@@ -299,6 +310,9 @@ function ChooseBumps(element, options) {
 			option.innerHTML = parseTemplate(item, Template);
 			option.addEventListener('click', selectItem.bind(null, item));
 
+			if (Categorize && (!previousItem || getPropertyByString(Categorize, previousItem) !== getPropertyByString(Categorize, item))) option.setAttribute('category', getPropertyByString(Categorize, item));
+
+			previousItem = item;
 			ItemContainer.appendChild(option);
 		});
 	}
@@ -310,11 +324,8 @@ function ChooseBumps(element, options) {
 			var selector = '';
 			var value = data;
 			if (m[1]) {
-				var keys = m[1].split('.');
 				selector = '.' + m[1];
-				value = keys.reduce(function Reduce(val, item) {
-					return val[item];
-				}, data);
+				value = getPropertyByString(m[1], data);
 			}
 
 			var replace = new RegExp('{{data' + selector + '}}');
@@ -322,6 +333,12 @@ function ChooseBumps(element, options) {
 		}
 
 		return template;
+	}
+
+	function getPropertyByString(selector, object) {
+		return selector.split('.').reduce(function (val, item) {
+			return val[item];
+		}, object);
 	}
 
 	/* -------------------- */
@@ -419,6 +436,16 @@ function ChooseBumps(element, options) {
 			},
 			set: function set(x) {
 				if (typeof x === 'function') onSelect = x;else if (!x) onSelect = null;
+			}
+		},
+		'categorize': {
+			get: function get() {
+				return Categorize;
+			},
+			set: function set(x) {
+				if (typeof x === 'string') Categorize = x;else Categorize = null;
+
+				renderItems();
 			}
 		}
 	});

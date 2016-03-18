@@ -59,7 +59,8 @@ ChooseBumps(element,{
   template: '{{data}}',
   tagtemplate: null, //inherits from template if null
   selectedtemplate: null, //inherits from template if null
-  onselect: null
+  onselect: null,
+  categorize: null
 });
 ```
 
@@ -215,6 +216,42 @@ If `options.tagtemplate` is not set, it will inherit the template from `options.
 It works the same way as `options.template` --> see documentation further up.
 
 If `options.selectedtemplate` is not set, it will inherit the template from `options.template`.
+
+####`options.categorize`
+
+With `options.categorize` you can categorize the items by string.
+
+If i want to categorize by lastname with the following `options.items` set.
+```js
+  [
+    {
+      name: {
+        last: 'Doe',
+        first: 'John'
+      }
+    }
+  ]
+``` 
+
+You would set `options.categorize` = `'name.last'`.
+
+You can activate it either by sending it in to the options at initialization: 
+
+```js
+var cb = ChooseBumps('#cb',{
+  categorize: 'name.last'
+});
+```
+
+or anytime later by setting `categorize` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.categorize = null;
+```
+
+*`options.categorize` accepts a string or null as input and ignores all other types.*
 
 ####`options.onselect` (Callback)
 

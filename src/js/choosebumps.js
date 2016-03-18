@@ -17,6 +17,7 @@ function ChooseBumps(element,options) {
 	let SearchFields = null;
 	let Placeholder = null;
 	let Multiple = false;
+	let Categorize = null;
 	let Template = '';
 	let TagTemplate = null;
 	let SelectedTemplate = null;
@@ -33,6 +34,7 @@ function ChooseBumps(element,options) {
 		template: '{{data}}',
 		tagtemplate: null,
 		selectedtemplate: null,
+		categorize: null,
 		onselect: null
 	};
 
@@ -125,7 +127,7 @@ function ChooseBumps(element,options) {
     }
 
     function scrollSelectedIntoView() {
-		if(SelectedIndex === null) return;
+		if(!SelectedIndex || SelectedIndex < 0) return;
 		let selectedItem = ItemContainer.children[SelectedIndex];
 		let containerTop = ItemContainer.scrollTop;
 		let containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
@@ -244,12 +246,12 @@ function ChooseBumps(element,options) {
 
 	/* Rendering */
 
-	function renderHTML() {
+	function renderHTML() { //comment
 		let MainItem = document.createElement('div');
 			MainItem.className = 'cb-main-item cb-placeholder trigger';
 
 
-		let Caret = `<svg class="cb-caret trigger" viewBox="0 0 512 512">
+		let Caret = `<svg class="cb-caret trigger" viewBox="0 0 512 512" height="20" width="20">
 						<path class="trigger" d="m508 108c-4-4-11-4-15 1l-237 271l-237-271c-4-5-11-5-15-1c-5 4-5 10-1 15l245 280c2 3 5 4 8 4c3 0 6-1 8-4l245-280c4-5 4-11-1-15z"></path>
 					</svg>`;
 
@@ -302,6 +304,15 @@ function ChooseBumps(element,options) {
 
 	function renderItems(items) {
 		ItemContainer.innerHTML = '';
+
+		if(Categorize)
+			Items = Items.sort((a,b) => {
+				if(getPropertyByString(Categorize,a) < getPropertyByString(Categorize,b)) return -1;
+				if(getPropertyByString(Categorize,a) > getPropertyByString(Categorize,b)) return 1;
+				return 0;
+			});
+		
+		let previousItem = null;
 		Items.forEach((item,index) => {
 			if(items && items.indexOf(item) < 0) return;
 			if(Multiple && Selected && Selected.indexOf(item) > -1 || !Multiple && Selected === item) return;
@@ -310,6 +321,9 @@ function ChooseBumps(element,options) {
 				option.innerHTML = parseTemplate(item,Template);
 				option.addEventListener('click',selectItem.bind(null,item));
 
+			if(Categorize && (!previousItem || getPropertyByString(Categorize,previousItem) !== getPropertyByString(Categorize,item))) option.setAttribute('category',getPropertyByString(Categorize,item));
+
+			previousItem = item;
 			ItemContainer.appendChild(option);
 		});
 	}
@@ -321,11 +335,8 @@ function ChooseBumps(element,options) {
 			let selector = '';
 			let value = data;
 			if(m[1]) {
-				let keys = m[1].split('.');
 				selector = '.' + m[1];
-				value = keys.reduce(function Reduce(val,item) {
-					return val[item];
-				},data);
+				value = getPropertyByString(m[1],data);
 			}
 
 			let replace = new RegExp('{{data' + selector + '}}');
@@ -333,6 +344,12 @@ function ChooseBumps(element,options) {
 		} 
 
 		return template;
+	}
+
+	function getPropertyByString(selector,object) {
+		return selector.split('.').reduce((val,item) => {
+			return val[item];
+		},object);
 	}
 
 	/* -------------------- */
@@ -414,6 +431,15 @@ function ChooseBumps(element,options) {
 			set: (x) => {
 				if(typeof x === 'function') onSelect = x;
 				else if(!x) onSelect = null;
+			}
+		},
+		'categorize': {
+			get: () => Categorize,
+			set: (x) => {
+				if(typeof x === 'string') Categorize = x;
+				else Categorize = null;
+
+				renderItems();
 			}
 		}
 	});
