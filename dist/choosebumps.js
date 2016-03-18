@@ -19,6 +19,7 @@ function ChooseBumps(element, options) {
 	var SearchFields = null;
 	var Placeholder = null;
 	var Multiple = false;
+	var Categorize = null;
 	var Template = '';
 	var TagTemplate = null;
 	var SelectedTemplate = null;
@@ -35,6 +36,7 @@ function ChooseBumps(element, options) {
 		template: '{{data}}',
 		tagtemplate: null,
 		selectedtemplate: null,
+		categorize: null,
 		onselect: null
 	};
 
@@ -292,6 +294,14 @@ function ChooseBumps(element, options) {
 
 	function renderItems(items) {
 		ItemContainer.innerHTML = '';
+
+		if (Categorize) Items = Items.sort(function (a, b) {
+			if (getPropertyByString(Categorize, a) < getPropertyByString(Categorize, b)) return -1;
+			if (getPropertyByString(Categorize, a) > getPropertyByString(Categorize, b)) return 1;
+			return 0;
+		});
+
+		var previousItem = null;
 		Items.forEach(function (item, index) {
 			if (items && items.indexOf(item) < 0) return;
 			if (Multiple && Selected && Selected.indexOf(item) > -1 || !Multiple && Selected === item) return;
@@ -300,6 +310,9 @@ function ChooseBumps(element, options) {
 			option.innerHTML = parseTemplate(item, Template);
 			option.addEventListener('click', selectItem.bind(null, item));
 
+			if (Categorize && (!previousItem || getPropertyByString(Categorize, previousItem) !== getPropertyByString(Categorize, item))) option.setAttribute('category', getPropertyByString(Categorize, item));
+
+			previousItem = item;
 			ItemContainer.appendChild(option);
 		});
 	}
@@ -311,11 +324,8 @@ function ChooseBumps(element, options) {
 			var selector = '';
 			var value = data;
 			if (m[1]) {
-				var keys = m[1].split('.');
 				selector = '.' + m[1];
-				value = keys.reduce(function Reduce(val, item) {
-					return val[item];
-				}, data);
+				value = getPropertyByString(m[1], data);
 			}
 
 			var replace = new RegExp('{{data' + selector + '}}');
@@ -323,6 +333,12 @@ function ChooseBumps(element, options) {
 		}
 
 		return template;
+	}
+
+	function getPropertyByString(selector, object) {
+		return selector.split('.').reduce(function (val, item) {
+			return val[item];
+		}, object);
 	}
 
 	/* -------------------- */
@@ -420,6 +436,16 @@ function ChooseBumps(element, options) {
 			},
 			set: function set(x) {
 				if (typeof x === 'function') onSelect = x;else if (!x) onSelect = null;
+			}
+		},
+		'categorize': {
+			get: function get() {
+				return Categorize;
+			},
+			set: function set(x) {
+				if (typeof x === 'string') Categorize = x;else Categorize = null;
+
+				renderItems();
 			}
 		}
 	});
