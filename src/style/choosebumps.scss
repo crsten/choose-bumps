@@ -1,6 +1,15 @@
 $prefix: 'cb-';
+$text: #333;
+$border: #eaeaea;
+$hover: #30323F;
 
-$border: #ccc;
+@function setColor($background) {
+  @if (lightness($background) > 50) {
+    @return $text;
+  } @else {
+    @return #ffffff;
+  }
+}
 
 .choosebumps{
 	font-family: 'Raleway';
@@ -41,6 +50,11 @@ $border: #ccc;
 	right: 1em;
 	top: 50%;
 	transform: translateY(-50%);
+
+	path{
+		stroke: #333;
+		stroke-width: 20px;
+	}
 }
 
 .#{$prefix}items{
@@ -54,32 +68,43 @@ $border: #ccc;
 	left: -1px;
 	z-index: 1;
 	background: white;
-	border-left: 1px solid $border;
-	border-top: 1px solid $border;
-	border-right: 1px solid $border;
-	border-bottom: 1px solid $border;
+    box-shadow: 0 15px 35px -10px rgba(black,0.3);
+	border: 1px solid $border;
 
 	& > div{
 		padding: 1em;
 		cursor: default;
 
-		& + div{
+		&:not(:first-child){
 			border-top: 1px solid lighten($border,15%);
 		}
 
+		&[category]{
+			border-top: none;
+			&:before{
+				content: attr(category);
+				display: block;
+				margin: -1em -1em 1em -1em;
+				padding: 0.5em 1em;
+				background: $border;
+				color: darken($border,35%);
+			}
+		}
+
 		&:hover{
-			background-color: $border;
+			background-color: $hover;
+			color: setColor($hover);
 		}
 	}
 }
 
 .#{$prefix}selected-item{
-	
 	display:inline;
 }
 
 .#{$prefix}selected{
-	background-color: #eaeaea;
+	background-color: $hover;
+	color: setColor($hover);
 }
 
 .#{$prefix}tag{
@@ -123,6 +148,7 @@ $border: #ccc;
 
 .#{$prefix}search{
 	display:none;
+	padding: 0;
 	font-size: inherit;
 	font-family: inherit;
 	line-height: inherit;

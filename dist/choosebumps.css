@@ -2,7 +2,7 @@
   font-family: 'Raleway';
   font-size: 18px;
   line-height: 1.58;
-  border: 1px solid #ccc;
+  border: 1px solid #eaeaea;
   width: 100%;
   outline: none;
   position: relative;
@@ -27,6 +27,9 @@
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
+  .cb-caret path {
+    stroke: #333;
+    stroke-width: 20px; }
 
 .cb-items {
   display: none;
@@ -39,27 +42,36 @@
   left: -1px;
   z-index: 1;
   background: white;
-  border-left: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-bottom: 1px solid #ccc; }
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.3);
+  border: 1px solid #eaeaea; }
   .cb-items > div {
     padding: 1em;
     cursor: default; }
-    .cb-items > div + div {
-      border-top: 1px solid #f2f2f2; }
+    .cb-items > div:not(:first-child) {
+      border-top: 1px solid white; }
+    .cb-items > div[category] {
+      border-top: none; }
+      .cb-items > div[category]:before {
+        content: attr(category);
+        display: block;
+        margin: -1em -1em 1em -1em;
+        padding: 0.5em 1em;
+        background: #eaeaea;
+        color: #919191; }
     .cb-items > div:hover {
-      background-color: #ccc; }
+      background-color: #30323F;
+      color: #ffffff; }
 
 .cb-selected-item {
   display: inline; }
 
 .cb-selected {
-  background-color: #eaeaea; }
+  background-color: #30323F;
+  color: #ffffff; }
 
 .cb-tag {
   display: inline-block;
-  background-color: #ccc;
+  background-color: #eaeaea;
   padding: 0 .5em;
   border-radius: .25em;
   margin: .25em; }
@@ -88,6 +100,7 @@
 
 .cb-search {
   display: none;
+  padding: 0;
   font-size: inherit;
   font-family: inherit;
   line-height: inherit;
