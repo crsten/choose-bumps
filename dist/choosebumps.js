@@ -103,7 +103,7 @@ function ChooseBumps(element, options) {
 
 	/* Selecting */
 
-	function removeSelected(item, triggerCallback) {
+	function removeSelected(item, triggerCallback, event) {
 		event.stopPropagation();
 		Selected.splice(Selected.indexOf(item), 1);
 		if (!Selected.length) Selected = null;
@@ -147,7 +147,7 @@ function ChooseBumps(element, options) {
 		scrollSelectedIntoView();
 	}
 
-	function selectItem(item, triggerCallback) {
+	function selectItem(item, triggerCallback, event) {
 		Element.querySelector('.cb-main-item').classList.remove('cb-placeholder');
 		resetSearch();
 
