@@ -109,7 +109,7 @@ function ChooseBumps(element, options) {
 		if (!Selected.length) Selected = null;
 
 		if (!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
-		if (onRemove) onRemove(item);
+		if (onRemove && event) onRemove(item);
 		renderSelection();
 		renderItems();
 	}
@@ -162,7 +162,7 @@ function ChooseBumps(element, options) {
 			setOpened(false);
 		}
 
-		if (onSelect) onSelect(item);
+		if (onSelect && event) onSelect(item);
 		renderSelection();
 	}
 
