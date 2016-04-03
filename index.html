@@ -221,6 +221,9 @@
 			multiple: true,
 			placeholder: 'Tag...',
 			categorize: 'brand',
+			onremove: function(item) {
+				console.log('Removed', item);
+			},
 			template: '<p style="display:inline;">{{data.model}}</p>',
 			tagtemplate: '{{data.brand}} {{data.model}}'
 		});

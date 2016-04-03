@@ -23,6 +23,7 @@ function ChooseBumps(element,options) {
 	let SelectedTemplate = null;
 	let SelectedIndex = null;
 	let onSelect = null;
+	let onRemove = null;
 	let Items = [];
 
 	let defaults = {
@@ -35,7 +36,8 @@ function ChooseBumps(element,options) {
 		tagtemplate: null,
 		selectedtemplate: null,
 		categorize: null,
-		onselect: null
+		onselect: null,
+		onremove: null
 	};
 
 	function init() {
@@ -106,7 +108,7 @@ function ChooseBumps(element,options) {
 		if(!Selected.length) Selected = null;
 
 		if(!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
-
+		if(onRemove) onRemove(item);
 		renderSelection();
 		renderItems();
 	}
@@ -431,6 +433,13 @@ function ChooseBumps(element,options) {
 			set: (x) => {
 				if(typeof x === 'function') onSelect = x;
 				else if(!x) onSelect = null;
+			}
+		},
+		'onremove': {
+			get: () => onRemove,
+			set: (x) => {
+				if(typeof x === 'function') onRemove = x;
+				else if(!x) onRemove = null;
 			}
 		},
 		'categorize': {

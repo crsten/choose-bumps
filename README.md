@@ -60,6 +60,7 @@ ChooseBumps(element,{
   tagtemplate: null, //inherits from template if null
   selectedtemplate: null, //inherits from template if null
   onselect: null,
+  onremove: null,
   categorize: null
 });
 ```
@@ -278,6 +279,32 @@ cb.onselect = null;
 ```
 
 *`options.onselect` accepts a function or null as input and ignores all other types.*
+
+####`options.onremove` (Callback)
+
+With `options.onremove` you can attach a callback to the remove event.
+
+The callback function will get 1 parameter with the selected item.
+
+You can activate it either by sending it in to the options at initialization: 
+
+```js
+var cb = ChooseBumps('#cb',{
+  onremove: function(item){
+    //Woho, item here...
+  }
+});
+```
+
+or anytime later by setting `onremove` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.onremove = null;
+```
+
+*`options.onremove` accepts a function or null as input and ignores all other types.*
 
 ####`choosebumps.select` (Function)
 
