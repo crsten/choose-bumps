@@ -91,15 +91,4 @@ describe('choose-bumps',function() {
 			expect(cb.searchfields).to.be.a('string');
 		})
 	});
-
-	describe('onSelect',function() {
-		it('should trigger',function(done) {
-			cb.items = [1,2,3];
-			cb.onselect = function(item){
-				expect(item).to.be.equal(2);
-				done();
-			};
-			cb.select(2);
-		});
-	})
 });

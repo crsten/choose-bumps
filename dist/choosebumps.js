@@ -25,6 +25,8 @@ function ChooseBumps(element, options) {
 	var SelectedTemplate = null;
 	var SelectedIndex = null;
 	var onSelect = null;
+	var onAdd = null;
+	var onRemove = null;
 	var Items = [];
 
 	var defaults = {
@@ -37,7 +39,9 @@ function ChooseBumps(element, options) {
 		tagtemplate: null,
 		selectedtemplate: null,
 		categorize: null,
-		onselect: null
+		onselect: null,
+		onremove: null,
+		onadd: null
 	};
 
 	function init() {
@@ -93,7 +97,11 @@ function ChooseBumps(element, options) {
 				selectNext();
 				break;
 			case 13:
-				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)]);
+				if (typeof onAdd === 'function' && SelectedIndex === -1) {
+					onAdd(e.target.value);
+					return e.target.value = '';
+				}
+				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)], true);
 				SelectedIndex = null;
 				break;
 		}
@@ -101,13 +109,13 @@ function ChooseBumps(element, options) {
 
 	/* Selecting */
 
-	function removeSelected(item, event) {
+	function removeSelected(item, triggerCallback, event) {
 		event.stopPropagation();
 		Selected.splice(Selected.indexOf(item), 1);
 		if (!Selected.length) Selected = null;
 
 		if (!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
-
+		if (onRemove && triggerCallback) onRemove(item);
 		renderSelection();
 		renderItems();
 	}
@@ -145,7 +153,7 @@ function ChooseBumps(element, options) {
 		scrollSelectedIntoView();
 	}
 
-	function selectItem(item, event) {
+	function selectItem(item, triggerCallback, event) {
 		Element.querySelector('.cb-main-item').classList.remove('cb-placeholder');
 		resetSearch();
 
@@ -160,7 +168,7 @@ function ChooseBumps(element, options) {
 			setOpened(false);
 		}
 
-		if (onSelect) onSelect(item);
+		if (onSelect && triggerCallback) onSelect(item);
 		renderSelection();
 	}
 
@@ -276,7 +284,7 @@ function ChooseBumps(element, options) {
 				tag.className = 'cb-tag';
 				tag.innerHTML = parseTemplate(item, TagTemplate || Template) + '<svg viewBox="0 0 512 512">\n\t\t\t\t\t\t<path d="m271 256l238-238c4-4 4-11 0-15c-4-4-11-4-15 0l-238 238l-238-238c-4-4-11-4-15 0c-4 4-4 11 0 15l238 238l-238 238c-4 4-4 11 0 15c2 2 5 3 8 3c2 0 5-1 7-3l238-238l238 238c2 2 5 3 7 3c3 0 6-1 8-3c4-4 4-11 0-15z"></path>\n\t\t\t\t\t</svg>';
 
-				tag.querySelector('svg').addEventListener('click', removeSelected.bind(null, item));
+				tag.querySelector('svg').addEventListener('click', removeSelected.bind(null, item, true));
 
 				mainItem.insertBefore(tag, mainItem.children[mainItem.children.length - 1]);
 			});
@@ -308,7 +316,7 @@ function ChooseBumps(element, options) {
 			var option = document.createElement('div');
 			option.setAttribute('data-id', index);
 			option.innerHTML = parseTemplate(item, Template);
-			option.addEventListener('click', selectItem.bind(null, item));
+			option.addEventListener('click', selectItem.bind(null, item, true));
 
 			if (Categorize && (!previousItem || getPropertyByString(Categorize, previousItem) !== getPropertyByString(Categorize, item))) option.setAttribute('category', getPropertyByString(Categorize, item));
 
@@ -436,6 +444,22 @@ function ChooseBumps(element, options) {
 			},
 			set: function set(x) {
 				if (typeof x === 'function') onSelect = x;else if (!x) onSelect = null;
+			}
+		},
+		'onremove': {
+			get: function get() {
+				return onRemove;
+			},
+			set: function set(x) {
+				if (typeof x === 'function') onRemove = x;else if (!x) onRemove = null;
+			}
+		},
+		'onadd': {
+			get: function get() {
+				return onAdd;
+			},
+			set: function set(x) {
+				if (typeof x === 'function') onAdd = x;else if (!x) onAdd = null;
 			}
 		},
 		'categorize': {

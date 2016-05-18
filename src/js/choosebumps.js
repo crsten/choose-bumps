@@ -23,6 +23,8 @@ function ChooseBumps(element,options) {
 	let SelectedTemplate = null;
 	let SelectedIndex = null;
 	let onSelect = null;
+	let onAdd = null;
+	let onRemove = null;
 	let Items = [];
 
 	let defaults = {
@@ -35,7 +37,9 @@ function ChooseBumps(element,options) {
 		tagtemplate: null,
 		selectedtemplate: null,
 		categorize: null,
-		onselect: null
+		onselect: null,
+		onremove: null,
+		onadd: null
 	};
 
 	function init() {
@@ -43,7 +47,7 @@ function ChooseBumps(element,options) {
 		Element.classList.add('choosebumps');
 		Element.setAttribute('tabindex',0);
 		renderHTML();
-		
+
 		setArgs.call(this,options || {});
 	}
 
@@ -55,11 +59,11 @@ function ChooseBumps(element,options) {
 
 	function setMultiple(state) {
 		Multiple = (state) ? true : false;
-		if(Multiple) if(typeof Selected === 'object' && Selected) Selected = [Selected]; 
+		if(Multiple) if(typeof Selected === 'object' && Selected) Selected = [Selected];
 	}
-	
+
 	/* Interactions */
-	
+
 	function setOpened(state) {
 		if(state === true) {
 			renderItems();
@@ -92,21 +96,25 @@ function ChooseBumps(element,options) {
 			selectNext();
 			break;
 			case 13:
-			selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'),10)]);
+			if(typeof onAdd === 'function' && SelectedIndex === -1){
+				onAdd(e.target.value);
+				return e.target.value = '';
+			}
+			selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'),10)],true);
 			SelectedIndex = null;
 			break;
-		}   
+		}
 	}
 
 	/* Selecting */
 
-	function removeSelected(item,event) {
+	function removeSelected(item,triggerCallback,event) {
 		event.stopPropagation();
 		Selected.splice(Selected.indexOf(item),1);
 		if(!Selected.length) Selected = null;
 
 		if(!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
-
+		if(onRemove && triggerCallback) onRemove(item);
 		renderSelection();
 		renderItems();
 	}
@@ -116,7 +124,7 @@ function ChooseBumps(element,options) {
         let max = ItemContainer.children.length - 1;
 
         SelectedIndex = (SelectedIndex < max) ? SelectedIndex + 1 : max;
-        updateSelection();        
+        updateSelection();
     }
 
     function selectPrev() {
@@ -132,7 +140,7 @@ function ChooseBumps(element,options) {
 		let containerTop = ItemContainer.scrollTop;
 		let containerBottom = ItemContainer.scrollTop + ItemContainer.clientHeight;
 		let selectedItemTop = selectedItem.offsetTop;
-		let selectedItemBottom = selectedItem.offsetTop + selectedItem.clientHeight; 
+		let selectedItemBottom = selectedItem.offsetTop + selectedItem.clientHeight;
 		if(selectedItemTop < containerTop) ItemContainer.scrollTop = selectedItem.offsetTop;
 		else if(selectedItemBottom > containerBottom) ItemContainer.scrollTop = selectedItemBottom - ItemContainer.clientHeight;
     }
@@ -143,9 +151,9 @@ function ChooseBumps(element,options) {
         let el = ItemContainer.children[SelectedIndex];
         if(el) el.classList.add('cb-selected');
         scrollSelectedIntoView();
-    } 
+    }
 
-	function selectItem(item,event) {
+	function selectItem(item,triggerCallback,event) {
 		Element.querySelector('.cb-main-item').classList.remove('cb-placeholder');
 		resetSearch();
 
@@ -161,7 +169,7 @@ function ChooseBumps(element,options) {
 			setOpened(false);
 		}
 
-		if(onSelect) onSelect(item);
+		if(onSelect && triggerCallback) onSelect(item);
 		renderSelection();
 	}
 
@@ -225,7 +233,7 @@ function ChooseBumps(element,options) {
 				return state;
 			}else
 			if(typeof x === 'string') return regex.test(x);
-			else 
+			else
 				return searchObject(x);
 		});
 
@@ -261,7 +269,7 @@ function ChooseBumps(element,options) {
 		ItemContainer = document.createElement('div');
 		ItemContainer.className = 'cb-items';
 		Element.appendChild(ItemContainer);
-		
+
 		Element.querySelector('.cb-main-item').addEventListener('click',(e) => {
 			e.stopPropagation();
 			setOpened(!isOpen);
@@ -269,7 +277,7 @@ function ChooseBumps(element,options) {
 	}
 
 	function renderSelection() {
-		
+
 		let mainItem = Element.querySelector('.cb-main-item');
 
 		if(Multiple) {
@@ -285,7 +293,7 @@ function ChooseBumps(element,options) {
 						<path d="m271 256l238-238c4-4 4-11 0-15c-4-4-11-4-15 0l-238 238l-238-238c-4-4-11-4-15 0c-4 4-4 11 0 15l238 238l-238 238c-4 4-4 11 0 15c2 2 5 3 8 3c2 0 5-1 7-3l238-238l238 238c2 2 5 3 7 3c3 0 6-1 8-3c4-4 4-11 0-15z"></path>
 					</svg>`;
 
-					tag.querySelector('svg').addEventListener('click',removeSelected.bind(null,item));
+					tag.querySelector('svg').addEventListener('click',removeSelected.bind(null,item,true));
 
 				mainItem.insertBefore(tag,mainItem.children[mainItem.children.length - 1]);
 			});
@@ -294,7 +302,7 @@ function ChooseBumps(element,options) {
 			let item = document.createElement('div');
 				item.className = 'cb-selected-item';
 				item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
-			
+
 
 			let previousItem = Element.querySelector('.cb-selected-item');
 			if(previousItem) mainItem.removeChild(previousItem);
@@ -311,7 +319,7 @@ function ChooseBumps(element,options) {
 				if(getPropertyByString(Categorize,a) > getPropertyByString(Categorize,b)) return 1;
 				return 0;
 			});
-		
+
 		let previousItem = null;
 		Items.forEach((item,index) => {
 			if(items && items.indexOf(item) < 0) return;
@@ -319,7 +327,7 @@ function ChooseBumps(element,options) {
 			let option = document.createElement('div');
 				option.setAttribute('data-id', index);
 				option.innerHTML = parseTemplate(item,Template);
-				option.addEventListener('click',selectItem.bind(null,item));
+				option.addEventListener('click',selectItem.bind(null,item,true));
 
 			if(Categorize && (!previousItem || getPropertyByString(Categorize,previousItem) !== getPropertyByString(Categorize,item))) option.setAttribute('category',getPropertyByString(Categorize,item));
 
@@ -341,7 +349,7 @@ function ChooseBumps(element,options) {
 
 			let replace = new RegExp('{{data' + selector + '}}');
 			template = template.replace(replace,value);
-		} 
+		}
 
 		return template;
 	}
@@ -433,6 +441,20 @@ function ChooseBumps(element,options) {
 				else if(!x) onSelect = null;
 			}
 		},
+		'onremove': {
+			get: () => onRemove,
+			set: (x) => {
+				if(typeof x === 'function') onRemove = x;
+				else if(!x) onRemove = null;
+			}
+		},
+		'onadd': {
+			get: () => onAdd,
+			set: (x) => {
+				if(typeof x === 'function') onAdd = x;
+				else if(!x) onAdd = null;
+			}
+		},
 		'categorize': {
 			get: () => Categorize,
 			set: (x) => {
@@ -447,7 +469,7 @@ function ChooseBumps(element,options) {
 	this.select = function Select(item) {
 		let match = Items.reduce((m,i) => m = isEquivalent(item,i) ? i : m,null);
 		if(match) selectItem(match);
-		
+
 		function isEquivalent(a, b) {
 			if(typeof a !== 'object' && typeof b !== 'object') return a === b;
 			let aProps = Object.getOwnPropertyNames(a);

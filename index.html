@@ -72,7 +72,7 @@
 			<div id="choosebumps"></div>
 		</div>
 	</div>
-	
+
 	<div class="container">
 		<div style="width:100%;">
 			<h2>Search</h2>
@@ -207,6 +207,9 @@
 		var cbSearch = ChooseBumps(document.getElementById('choosebumps-search'),{
 			items: content,
 			search:true,
+			onadd: function(val) {
+				console.log('Add: ',val);
+			},
 			searchfields: 'text family',
 			categorize: 'family',
 			placeholder: 'Search...',
@@ -221,6 +224,9 @@
 			multiple: true,
 			placeholder: 'Tag...',
 			categorize: 'brand',
+			onremove: function(item) {
+				console.log('Removed', item);
+			},
 			template: '<p style="display:inline;">{{data.model}}</p>',
 			tagtemplate: '{{data.brand}} {{data.model}}'
 		});
