@@ -101,6 +101,7 @@ function ChooseBumps(element, options) {
 					onAdd(e.target.value);
 					return e.target.value = '';
 				}
+				if (SelectedIndex < 0) return;
 				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)], true);
 				SelectedIndex = null;
 				break;
