@@ -61,6 +61,7 @@ ChooseBumps(element,{
   selectedtemplate: null, //inherits from template if null
   onselect: null,
   onremove: null,
+  onadd: null,
   categorize: null
 });
 ```
@@ -69,7 +70,7 @@ The options are detailed below. **All the options can be set at initialization o
 
 ####`options.items`
 
-By default `choosebumps` has no items. You can add items either by sending them in to the options at initialization: 
+By default `choosebumps` has no items. You can add items either by sending them in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -89,7 +90,7 @@ cb.items = [5,6,7];
 
 ####`options.placeholder`
 
-By default `choosebumps` has `"Choose"` as the placeholder text. You can change the placeholder text either by sending them in to the options at initialization: 
+By default `choosebumps` has `"Choose"` as the placeholder text. You can change the placeholder text either by sending them in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -109,7 +110,7 @@ cb.placeholder = 'Have you choosen already?';
 
 ####`options.search`
 
-By default `choosebumps` has disabled `search`. You can activate it either by sending it to the options at initialization: 
+By default `choosebumps` has disabled `search`. You can activate it either by sending it to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -132,7 +133,7 @@ If you want to define what `choosebumps` should look for remember to set `option
 
 ####`options.searchfields` (only relevant if `items` are objects)
 
-By default `choosebumps` searches through each property in all `items`. You can define wich fields should be searched by sending a string in to the options at initialization: 
+By default `choosebumps` searches through each property in all `items`. You can define wich fields should be searched by sending a string in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -154,7 +155,7 @@ cb.searchfields = 'firstname lastname' //Space separated string
 
 With `options.multiple` you can allow selection of multiple items.
 
-By default `choosebumps` has disabled `multiple` selection. You can activate it either by sending it in to the options at initialization: 
+By default `choosebumps` has disabled `multiple` selection. You can activate it either by sending it in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -172,7 +173,7 @@ cb.multiple = false;
 
 *`options.multiple` accepts anything as input and checks the input for its thruthiness.*
 
-####`options.template` 
+####`options.template`
 
 The templating in `choosebumps` is inspired by the moustache library. All variables can be rendered into view by putting the key of the object between `{{` and `}}`. This does also work for nested object. **Be aware that all variables must be prefixed with `data.`**
 
@@ -186,7 +187,7 @@ var obj = {
 '{{data.name.first}} {{data.name.last}}' --- renders ---> 'Boba Fett'
 ```
 
-By default `choosebumps` has `{{data}}` as the template (Works for array of string or numbers). You can change it either by sending it in to the options at initialization: 
+By default `choosebumps` has `{{data}}` as the template (Works for array of string or numbers). You can change it either by sending it in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -232,11 +233,11 @@ If i want to categorize by lastname with the following `options.items` set.
       }
     }
   ]
-``` 
+```
 
 You would set `options.categorize` = `'name.last'`.
 
-You can activate it either by sending it in to the options at initialization: 
+You can activate it either by sending it in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -260,7 +261,7 @@ With `options.onselect` you can attach a callback to the select event.
 
 The callback function will get 1 parameter with the selected item.
 
-You can activate it either by sending it in to the options at initialization: 
+You can activate it either by sending it in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -286,7 +287,7 @@ With `options.onremove` you can attach a callback to the remove event.
 
 The callback function will get 1 parameter with the selected item.
 
-You can activate it either by sending it in to the options at initialization: 
+You can activate it either by sending it in to the options at initialization:
 
 ```js
 var cb = ChooseBumps('#cb',{
@@ -305,6 +306,34 @@ cb.onremove = null;
 ```
 
 *`options.onremove` accepts a function or null as input and ignores all other types.*
+
+####`options.onadd` (Callback)
+
+With `options.onadd` you can attach a callback to the add event (works with search mode only).
+
+Add gets triggered when pressing enter and no other item is selected.
+
+The callback function will get 1 parameter with the typed text.
+
+You can activate it either by sending it in to the options at initialization:
+
+```js
+var cb = ChooseBumps('#cb',{
+  onadd: function(value){
+    //Woho, value here...
+  }
+});
+```
+
+or anytime later by setting `onadd` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.onadd = null;
+```
+
+*`options.onadd` accepts a function or null as input and ignores all other types.*
 
 ####`choosebumps.select` (Function)
 
@@ -325,5 +354,3 @@ cb.select(4);
 ---
 
 **Great shoutout to [Kent C. Dodds](https://github.com/kentcdodds) for providing great tutorials on [how to write an open source library](https://egghead.io/series/how-to-write-an-open-source-javascript-library)**
-
-

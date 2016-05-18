@@ -25,6 +25,7 @@ function ChooseBumps(element, options) {
 	var SelectedTemplate = null;
 	var SelectedIndex = null;
 	var onSelect = null;
+	var onAdd = null;
 	var onRemove = null;
 	var Items = [];
 
@@ -39,7 +40,8 @@ function ChooseBumps(element, options) {
 		selectedtemplate: null,
 		categorize: null,
 		onselect: null,
-		onremove: null
+		onremove: null,
+		onadd: null
 	};
 
 	function init() {
@@ -95,6 +97,10 @@ function ChooseBumps(element, options) {
 				selectNext();
 				break;
 			case 13:
+				if (typeof onAdd === 'function' && SelectedIndex === -1) {
+					onAdd(e.target.value);
+					return e.target.value = '';
+				}
 				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)], true);
 				SelectedIndex = null;
 				break;
@@ -446,6 +452,14 @@ function ChooseBumps(element, options) {
 			},
 			set: function set(x) {
 				if (typeof x === 'function') onRemove = x;else if (!x) onRemove = null;
+			}
+		},
+		'onadd': {
+			get: function get() {
+				return onAdd;
+			},
+			set: function set(x) {
+				if (typeof x === 'function') onAdd = x;else if (!x) onAdd = null;
 			}
 		},
 		'categorize': {
