@@ -110,9 +110,13 @@ function ChooseBumps(element,options) {
 	/* Selecting */
 
 	function removeSelected(item,triggerCallback,event) {
-		event.stopPropagation();
-		Selected.splice(Selected.indexOf(item),1);
-		if(!Selected.length) Selected = null;
+		if(event) event.stopPropagation();
+		if(Selected.constructor === Array) {
+			Selected.splice(Selected.indexOf(item),1);
+			if(!Selected.length) Selected = null;
+		}else{
+			Selected = null;
+		}
 
 		if(!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
 		if(onRemove && triggerCallback) onRemove(item);
@@ -299,7 +303,7 @@ function ChooseBumps(element,options) {
 				mainItem.insertBefore(tag,mainItem.children[mainItem.children.length - 1]);
 			});
 		} else {
-			if(!Selected) return;
+			if(!Selected) return [].slice.call(mainItem.querySelectorAll('.cb-selected-item,.cb-tag')).forEach( e => mainItem.removeChild(e));
 			let item = document.createElement('div');
 				item.className = 'cb-selected-item';
 				item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
@@ -462,12 +466,13 @@ function ChooseBumps(element,options) {
 				if(typeof x === 'string') Categorize = x;
 				else Categorize = null;
 
-				renderItems();
+				renderItems()	;
 			}
 		}
 	});
 
 	this.select = function Select(item) {
+		if(!item) return Reset();
 		let match = Items.reduce((m,i) => m = isEquivalent(item,i) ? i : m,null);
 		if(match) selectItem(match);
 
@@ -486,6 +491,21 @@ function ChooseBumps(element,options) {
 			return true;
 		}
 	};
+
+	function Reset() {
+		if(Selected.constructor === Array) {
+			var copy = Selected.slice();
+			copy.forEach(function(item) {
+				removeSelected(item,true);
+			});
+		}else{
+			removeSelected(Selected,true);
+		}
+
+		resetSearch();
+	}
+
+	this.reset = Reset;
 
 
 	init.call(this);
