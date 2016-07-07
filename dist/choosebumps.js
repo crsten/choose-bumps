@@ -112,7 +112,7 @@ function ChooseBumps(element, options) {
 
 	function removeSelected(item, triggerCallback, event) {
 		if (event) event.stopPropagation();
-		if (Selected.constructor === Array) {
+		if (Selected && Selected.constructor === Array) {
 			Selected.splice(Selected.indexOf(item), 1);
 			if (!Selected.length) Selected = null;
 		} else {
@@ -505,7 +505,7 @@ function ChooseBumps(element, options) {
 	};
 
 	function Reset() {
-		if (Selected.constructor === Array) {
+		if (Selected && Selected.constructor === Array) {
 			var copy = Selected.slice();
 			copy.forEach(function (item) {
 				removeSelected(item, true);
