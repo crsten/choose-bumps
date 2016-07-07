@@ -487,22 +487,30 @@ function ChooseBumps(element, options) {
 			return m = isEquivalent(item, i) ? i : m;
 		}, null);
 		if (match) selectItem(match);
-
-		function isEquivalent(a, b) {
-			if ((typeof a === 'undefined' ? 'undefined' : _typeof(a)) !== 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) !== 'object') return a === b;
-			var aProps = Object.getOwnPropertyNames(a);
-			var bProps = Object.getOwnPropertyNames(b);
-
-			if (aProps.length !== bProps.length) return false;
-
-			for (var i = 0; i < aProps.length; i++) {
-				var propName = aProps[i];
-
-				if (a[propName] !== b[propName]) return false;
-			}
-			return true;
-		}
 	};
+
+	this.remove = function Remove(item) {
+		if (!item) return Reset();
+		var match = Items.reduce(function (m, i) {
+			return m = isEquivalent(item, i) ? i : m;
+		}, null);
+		if (match) removeSelected(match, true);
+	};
+
+	function isEquivalent(a, b) {
+		if ((typeof a === 'undefined' ? 'undefined' : _typeof(a)) !== 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) !== 'object') return a === b;
+		var aProps = Object.getOwnPropertyNames(a);
+		var bProps = Object.getOwnPropertyNames(b);
+
+		if (aProps.length !== bProps.length) return false;
+
+		for (var i = 0; i < aProps.length; i++) {
+			var propName = aProps[i];
+
+			if (a[propName] !== b[propName]) return false;
+		}
+		return true;
+	}
 
 	function Reset() {
 		if (Selected && Selected.constructor === Array) {

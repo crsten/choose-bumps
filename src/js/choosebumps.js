@@ -475,22 +475,28 @@ function ChooseBumps(element,options) {
 		if(!item) return Reset();
 		let match = Items.reduce((m,i) => m = isEquivalent(item,i) ? i : m,null);
 		if(match) selectItem(match);
-
-		function isEquivalent(a, b) {
-			if(typeof a !== 'object' && typeof b !== 'object') return a === b;
-			let aProps = Object.getOwnPropertyNames(a);
-			let bProps = Object.getOwnPropertyNames(b);
-
-			if (aProps.length !== bProps.length) return false;
-
-			for (let i = 0; i < aProps.length; i++) {
-				let propName = aProps[i];
-
-				if(a[propName] !== b[propName]) return false;
-			}
-			return true;
-		}
 	};
+
+	this.remove = function Remove(item) {
+		if(!item) return Reset();
+		let match = Items.reduce((m,i) => m = isEquivalent(item,i) ? i : m,null);
+		if(match) removeSelected(match,true);
+	}
+
+	function isEquivalent(a, b) {
+		if(typeof a !== 'object' && typeof b !== 'object') return a === b;
+		let aProps = Object.getOwnPropertyNames(a);
+		let bProps = Object.getOwnPropertyNames(b);
+
+		if (aProps.length !== bProps.length) return false;
+
+		for (let i = 0; i < aProps.length; i++) {
+			let propName = aProps[i];
+
+			if(a[propName] !== b[propName]) return false;
+		}
+		return true;
+	}
 
 	function Reset() {
 		if(Selected && Selected.constructor === Array) {

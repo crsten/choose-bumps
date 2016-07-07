@@ -66,7 +66,17 @@ ChooseBumps(element,{
 });
 ```
 
-The options are detailed below. **All the options can be set at initialization or anytime later when you feel for it(even if `choosebumps` is open or whatever)**
+The following functions are supported on the returned instance
+
+```js
+
+cb.select(item);
+cb.remove(item);
+cb.reset();
+
+```
+
+The options/functions are detailed below. **All the options can be set at initialization or anytime later when you feel for it(even if `choosebumps` is open or whatever)**
 
 ####`options.items`
 
@@ -341,6 +351,8 @@ With `choosebumps.select` you can programmaticaly set the selected item.
 
 The function will take the item to be selected as parameter. **Only items that are in `options.items` can be selected!**
 
+**If the parameter is null, reset gets called!**
+
 You can call it on the returned `choosebumps` instance:
 
 ```js
@@ -350,6 +362,40 @@ var cb = ChooseBumps('#cb',{
 //Some lines later...
 cb.select(4);
 ```
+
+####`choosebumps.remove` (Function)
+
+With `choosebumps.remove` you can programmaticaly remove a selected item.
+
+The function will take the item to be removed from selection as parameter. **Only items that are selected can be removed!**
+
+**If the parameter is null, reset gets called!**
+
+You can call it on the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb',{
+  items: [1,2,3,4]
+});
+//Some lines later...
+cb.remove(4);
+```
+
+####`choosebumps.reset` (Function)
+
+With `choosebumps.reset` you can programmaticaly remove all selected items.
+
+You can call it on the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb',{
+  items: [1,2,3,4]
+});
+//Some lines later...
+cb.reset();
+```
+
+
 
 ---
 
