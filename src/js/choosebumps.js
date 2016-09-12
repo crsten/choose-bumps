@@ -46,6 +46,7 @@ function ChooseBumps(element,options) {
 		this.element = element;
 		Element.classList.add('choosebumps');
 		Element.setAttribute('tabindex',0);
+		if(Element.getAttribute('placeholder')) defaults.placeholder = Element.getAttribute('placeholder');
 		renderHTML();
 
 		setArgs.call(this,options || {});
