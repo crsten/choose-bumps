@@ -96,7 +96,38 @@ var cb = ChooseBumps('#cb');
 cb.items = [5,6,7];
 ```
 
-*`options.items` accepts an array as input and ignores all other types.*
+You can also send in a string(URL) which will be fetched either dynamically when searching or when the property is being set.
+If you want search dynamically with `choosebumps` replace the part that should be changed in the URL with `{{query}}`. It will then make a new call everytime the searchphrase changes.
+
+*`options.items` accepts an array or string(url) as input and ignores all other types.*
+
+####`options.processing`
+
+If you need to preprocess the fetched data before passing it to `choosebumps` you can do it with the `options.processing` property. You can set it at initialization:
+
+```js
+var cb = ChooseBumps('#cb',{
+  processing: function(fetched_data) {
+    //Do some stuff with your data here and pass it on...
+    return fetched_data.map(function(enrty) {
+      return {
+        firstname: entry.firstname,
+        lastname: entry.lastname
+      };
+    });
+  }
+});
+```
+
+or anytime later by setting `processing` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.processing = function Your_function(){};
+```
+
+*`options.processing` accepts a function as input and ignores all other types.*
 
 ####`options.placeholder`
 

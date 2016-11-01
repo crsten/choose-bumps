@@ -11,6 +11,7 @@ function ChooseBumps(element,options) {
 
 	let Element = null;
 	let ItemContainer = null;
+	let LoadingContainer = null;
 	let Search = false;
 	let Selected = null;
 	let isOpen = false;
@@ -23,8 +24,12 @@ function ChooseBumps(element,options) {
 	let SelectedTemplate = null;
 	let SelectedIndex = null;
 	let onSelect = null;
+	let Processing = null;
 	let onAdd = null;
 	let onRemove = null;
+	let TypeTreshold = null;
+	let Fetch = null;
+	let FetchUrl = null;
 	let Items = [];
 
 	let defaults = {
@@ -37,6 +42,7 @@ function ChooseBumps(element,options) {
 		tagtemplate: null,
 		selectedtemplate: null,
 		categorize: null,
+		processing: null,
 		onselect: null,
 		onremove: null,
 		onadd: null
@@ -196,9 +202,15 @@ function ChooseBumps(element,options) {
 
 				SearchBox.addEventListener('keyup',function KeyUp(e) {
 					if(new RegExp('38|40|13').test(e.keyCode) === false) {
-						renderItems(search(this.value));
-						SelectedIndex = null;
-						selectNext();
+						TypeTreshold && clearTimeout(TypeTreshold);
+						TypeTreshold = setTimeout(function(){
+							search(SearchBox.value,function(result){
+								if(/{{.*}}/ig.test(FetchUrl)) Items = result;
+								renderItems(result);
+								SelectedIndex = null;
+								selectNext();
+							});
+						},200);
 					}
 				});
 
@@ -220,28 +232,35 @@ function ChooseBumps(element,options) {
 		Element.querySelector('.cb-search').focus();
 	}
 
-	function search(query) {
+	function search(query,cb) {
 		if(!query) return Items;
 		let regex = new RegExp(query,'i');
 
-		return Items.filter(function Filter(x) {
-			if(SearchFields) {
-				let state = false;
-				SearchFields.split(' ').forEach(function ForEach(field) {
-					let keys = field.split('.');
-					let value = keys.reduce(function Reduce(val,item) {
-						return val[item];
-					},x);
+		if(/{{.*}}/ig.test(FetchUrl)) {
+			fetchItems(FetchUrl.replace(/{{query}}/,query),cb);
+		}else{
+			cb(Items.filter(function Filter(x) {
+				if(SearchFields) {
+					let state = false;
+					SearchFields.split(' ').forEach(function ForEach(field) {
+						let keys = field.split('.');
+						let value = keys.reduce(function Reduce(val,item) {
+							return val[item];
+						},x);
 
-					if(regex.test(value)) state = true;
-				});
+						if(regex.test(value)) state = true;
+					});
 
-				return state;
-			}else
-			if(typeof x === 'string') return regex.test(x);
-			else
-				return searchObject(x);
-		});
+					return state;
+				}else
+				if(typeof x === 'string') return regex.test(x);
+				else
+					return searchObject(x);
+			}));
+		}
+
+
+
 
 		function searchObject(obj) {
 			return Object.keys(obj).reduce(function Reduce(val,key) {
@@ -275,6 +294,10 @@ function ChooseBumps(element,options) {
 		ItemContainer = document.createElement('div');
 		ItemContainer.className = 'cb-items';
 		Element.appendChild(ItemContainer);
+
+		LoadingContainer = document.createElement('div');
+		LoadingContainer.className = 'cb-loader';
+		Element.appendChild(LoadingContainer);
 
 		Element.querySelector('.cb-main-item').addEventListener('click',(e) => {
 			e.stopPropagation();
@@ -313,6 +336,36 @@ function ChooseBumps(element,options) {
 			let previousItem = Element.querySelector('.cb-selected-item');
 			if(previousItem) mainItem.removeChild(previousItem);
 			mainItem.insertBefore(item,mainItem.children[mainItem.children.length - 1]);
+		}
+	}
+
+	function fetchItems(url,cb) {
+		if(Fetch) {
+			Fetch.abort();
+			toggleLoader(false);
+		}
+		Fetch = new XMLHttpRequest();
+		Fetch.open('GET',url);
+		Fetch.onreadystatechange = function(){
+			if(this.readyState == 4) {
+				toggleLoader(false);
+				if(this.status >= 200 && this.status < 400) {
+					cb((Processing) ? Processing(JSON.parse(this.responseText)) : JSON.parse(this.responseText));
+					Fetch = null;
+				}
+			}
+		}
+		Fetch.send();
+		toggleLoader(true);
+	}
+
+	function toggleLoader(state) {
+		if(state) {
+			LoadingContainer.classList.add('active');
+			Element.querySelector('.cb-caret').classList.add('hide');
+		}else{
+			LoadingContainer.classList.remove('active');
+			Element.querySelector('.cb-caret').classList.remove('hide');
 		}
 	}
 
@@ -381,10 +434,16 @@ function ChooseBumps(element,options) {
 			}
 		},
 		'items': {
-			get: () => Items,
+			get: () => FetchUrl || Items,
 			set: (x) => {
 				if(x instanceof Array) Items = x;
-				else console.error('Items must be an array.');
+				else if(typeof x == 'string') {
+					FetchUrl = x
+					if(!(/{{.*}}/ig.test(FetchUrl))) fetchItems(FetchUrl,function(result) {
+						Items = result;
+					});
+				}
+				else console.error('Items must be an array or URL.');
 			}
 		},
 		'search': {
@@ -445,6 +504,13 @@ function ChooseBumps(element,options) {
 			set: (x) => {
 				if(typeof x === 'function') onSelect = x;
 				else if(!x) onSelect = null;
+			}
+		},
+		'processing': {
+			get: () => Processing,
+			set: (x) => {
+				if(typeof x === 'function') Processing = x;
+				else if(!x) Processing = null;
 			}
 		},
 		'onremove': {

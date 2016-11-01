@@ -13,6 +13,7 @@ function ChooseBumps(element, options) {
 
 	var Element = null;
 	var ItemContainer = null;
+	var LoadingContainer = null;
 	var Search = false;
 	var Selected = null;
 	var isOpen = false;
@@ -25,8 +26,12 @@ function ChooseBumps(element, options) {
 	var SelectedTemplate = null;
 	var SelectedIndex = null;
 	var onSelect = null;
+	var Processing = null;
 	var onAdd = null;
 	var onRemove = null;
+	var TypeTreshold = null;
+	var Fetch = null;
+	var FetchUrl = null;
 	var Items = [];
 
 	var defaults = {
@@ -39,6 +44,7 @@ function ChooseBumps(element, options) {
 		tagtemplate: null,
 		selectedtemplate: null,
 		categorize: null,
+		processing: null,
 		onselect: null,
 		onremove: null,
 		onadd: null
@@ -186,26 +192,34 @@ function ChooseBumps(element, options) {
 		Search = state ? true : false;
 
 		if (Search) {
-			Element.classList.add('cb-search-enabled');
-			var SearchBox = document.createElement('input');
-			SearchBox.className = 'cb-search';
-			SearchBox.setAttribute('type', 'text');
-			SearchBox.setAttribute('size', 1);
-			SearchBox.setAttribute('autocomplete', 'off');
+			(function () {
+				Element.classList.add('cb-search-enabled');
+				var SearchBox = document.createElement('input');
+				SearchBox.className = 'cb-search';
+				SearchBox.setAttribute('type', 'text');
+				SearchBox.setAttribute('size', 1);
+				SearchBox.setAttribute('autocomplete', 'off');
 
-			SearchBox.addEventListener('keyup', function KeyUp(e) {
-				if (new RegExp('38|40|13').test(e.keyCode) === false) {
-					renderItems(search(this.value));
-					SelectedIndex = null;
-					selectNext();
-				}
-			});
+				SearchBox.addEventListener('keyup', function KeyUp(e) {
+					if (new RegExp('38|40|13').test(e.keyCode) === false) {
+						TypeTreshold && clearTimeout(TypeTreshold);
+						TypeTreshold = setTimeout(function () {
+							search(SearchBox.value, function (result) {
+								if (/{{.*}}/ig.test(FetchUrl)) Items = result;
+								renderItems(result);
+								SelectedIndex = null;
+								selectNext();
+							});
+						}, 200);
+					}
+				});
 
-			SearchBox.addEventListener('keypress', function KeyPress() {
-				this.setAttribute('size', this.value.length + 1);
-			});
+				SearchBox.addEventListener('keypress', function KeyPress() {
+					this.setAttribute('size', this.value.length + 1);
+				});
 
-			Element.querySelector('.cb-main-item').appendChild(SearchBox);
+				Element.querySelector('.cb-main-item').appendChild(SearchBox);
+			})();
 		} else Element.classList.remove('cb-search-enabled');
 	}
 
@@ -219,25 +233,29 @@ function ChooseBumps(element, options) {
 		Element.querySelector('.cb-search').focus();
 	}
 
-	function search(query) {
+	function search(query, cb) {
 		if (!query) return Items;
 		var regex = new RegExp(query, 'i');
 
-		return Items.filter(function Filter(x) {
-			if (SearchFields) {
-				var state = false;
-				SearchFields.split(' ').forEach(function ForEach(field) {
-					var keys = field.split('.');
-					var value = keys.reduce(function Reduce(val, item) {
-						return val[item];
-					}, x);
+		if (/{{.*}}/ig.test(FetchUrl)) {
+			fetchItems(FetchUrl.replace(/{{query}}/, query), cb);
+		} else {
+			cb(Items.filter(function Filter(x) {
+				if (SearchFields) {
+					var state = false;
+					SearchFields.split(' ').forEach(function ForEach(field) {
+						var keys = field.split('.');
+						var value = keys.reduce(function Reduce(val, item) {
+							return val[item];
+						}, x);
 
-					if (regex.test(value)) state = true;
-				});
+						if (regex.test(value)) state = true;
+					});
 
-				return state;
-			} else if (typeof x === 'string') return regex.test(x);else return searchObject(x);
-		});
+					return state;
+				} else if (typeof x === 'string') return regex.test(x);else return searchObject(x);
+			}));
+		}
 
 		function searchObject(obj) {
 			return Object.keys(obj).reduce(function Reduce(val, key) {
@@ -268,6 +286,10 @@ function ChooseBumps(element, options) {
 		ItemContainer = document.createElement('div');
 		ItemContainer.className = 'cb-items';
 		Element.appendChild(ItemContainer);
+
+		LoadingContainer = document.createElement('div');
+		LoadingContainer.className = 'cb-loader';
+		Element.appendChild(LoadingContainer);
 
 		Element.querySelector('.cb-main-item').addEventListener('click', function (e) {
 			e.stopPropagation();
@@ -305,6 +327,36 @@ function ChooseBumps(element, options) {
 			var previousItem = Element.querySelector('.cb-selected-item');
 			if (previousItem) mainItem.removeChild(previousItem);
 			mainItem.insertBefore(item, mainItem.children[mainItem.children.length - 1]);
+		}
+	}
+
+	function fetchItems(url, cb) {
+		if (Fetch) {
+			Fetch.abort();
+			toggleLoader(false);
+		}
+		Fetch = new XMLHttpRequest();
+		Fetch.open('GET', url);
+		Fetch.onreadystatechange = function () {
+			if (this.readyState == 4) {
+				toggleLoader(false);
+				if (this.status >= 200 && this.status < 400) {
+					cb(Processing ? Processing(JSON.parse(this.responseText)) : JSON.parse(this.responseText));
+					Fetch = null;
+				}
+			}
+		};
+		Fetch.send();
+		toggleLoader(true);
+	}
+
+	function toggleLoader(state) {
+		if (state) {
+			LoadingContainer.classList.add('active');
+			Element.querySelector('.cb-caret').classList.add('hide');
+		} else {
+			LoadingContainer.classList.remove('active');
+			Element.querySelector('.cb-caret').classList.remove('hide');
 		}
 	}
 
@@ -373,10 +425,15 @@ function ChooseBumps(element, options) {
 		},
 		'items': {
 			get: function get() {
-				return Items;
+				return FetchUrl || Items;
 			},
 			set: function set(x) {
-				if (x instanceof Array) Items = x;else console.error('Items must be an array.');
+				if (x instanceof Array) Items = x;else if (typeof x == 'string') {
+					FetchUrl = x;
+					if (!/{{.*}}/ig.test(FetchUrl)) fetchItems(FetchUrl, function (result) {
+						Items = result;
+					});
+				} else console.error('Items must be an array or URL.');
 			}
 		},
 		'search': {
@@ -452,6 +509,14 @@ function ChooseBumps(element, options) {
 			},
 			set: function set(x) {
 				if (typeof x === 'function') onSelect = x;else if (!x) onSelect = null;
+			}
+		},
+		'processing': {
+			get: function get() {
+				return Processing;
+			},
+			set: function set(x) {
+				if (typeof x === 'function') Processing = x;else if (!x) Processing = null;
 			}
 		},
 		'onremove': {
