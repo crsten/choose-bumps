@@ -82,6 +82,13 @@
 
 	<div class="container">
 		<div style="width:100%;">
+			<h2>Search (url)</h2>
+			<div id="choosebumps-fetch-search"></div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div style="width:100%;">
 			<h2>Multiple</h2>
 			<div id="choosebumps-tag"></div>
 		</div>
@@ -215,6 +222,25 @@
 			placeholder: 'Search...',
 			selectedtemplate: '{{data.value}}',
 			template: '<div class="img" style="background-image:url({{data.img}})"></div><p style="display:inline;">{{data.text}}</p>',
+			onselect: function(item){
+				console.log(item);
+			}
+		});
+		var cbFetchSearch = ChooseBumps(document.getElementById('choosebumps-fetch-search'),{
+			items: 'http://data.brreg.no/enhetsregisteret/enhet.json?$filter=startswith%28navn%2C%27{{query}}%27%29',
+			search:true,
+			placeholder: 'Search for companies...',
+			processing: function(result) {
+				return result.data.map(function(entry) {
+					return {
+						name: entry.navn,
+						orgno: entry.organisasjonsnummer,
+						homepage: entry.hjemmeside || ''
+					}
+				})
+			},
+			template: '{{data.name}} <br><i style="font-size: .8em;opacity: .5;">{{data.homepage}}</i>',
+			selectedtemplate: '{{data.name}}',
 			onselect: function(item){
 				console.log(item);
 			}
