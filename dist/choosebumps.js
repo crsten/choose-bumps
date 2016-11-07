@@ -32,6 +32,7 @@ function ChooseBumps(element, options) {
 	var TypeTreshold = null;
 	var Fetch = null;
 	var FetchUrl = null;
+	var MinLength = 0;
 	var Items = [];
 
 	var defaults = {
@@ -45,6 +46,7 @@ function ChooseBumps(element, options) {
 		selectedtemplate: null,
 		categorize: null,
 		processing: null,
+		minlength: null,
 		onselect: null,
 		onremove: null,
 		onadd: null
@@ -201,7 +203,7 @@ function ChooseBumps(element, options) {
 				SearchBox.setAttribute('autocomplete', 'off');
 
 				SearchBox.addEventListener('keyup', function KeyUp(e) {
-					if (new RegExp('38|40|13').test(e.keyCode) === false) {
+					if (new RegExp('38|40|13').test(e.keyCode) === false && this.value.length >= MinLength) {
 						TypeTreshold && clearTimeout(TypeTreshold);
 						TypeTreshold = setTimeout(function () {
 							search(SearchBox.value, function (result) {
@@ -434,6 +436,14 @@ function ChooseBumps(element, options) {
 						Items = result;
 					});
 				} else console.error('Items must be an array or URL.');
+			}
+		},
+		'minlength': {
+			get: function get() {
+				return MinLength;
+			},
+			set: function set(x) {
+				if (isNaN(x)) MinLength = 0;else MinLength = x;
 			}
 		},
 		'search': {

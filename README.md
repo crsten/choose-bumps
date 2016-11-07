@@ -53,6 +53,7 @@ You can provide `options` to customize `choosebumps`. Here's an **overview of th
 ChooseBumps(element,{
   placeholder: 'Choose',
   items: [],
+  minlength: 0,
   search: false,
   searchfields: '',
   multiple: false,
@@ -171,6 +172,26 @@ When searching, `choosebumps` will look through each property of each item in `i
 If you want to define what `choosebumps` should look for remember to set `options.searchfields`.
 
 *`options.search` accepts anything as input and checks the input for its thruthiness.*
+
+####`options.minlength`
+
+By default `choosebumps` has minlength of 0 which means it will start searching if the length of the input is longer than 0. You can change it either by sending it to the options at initialization:
+
+```js
+var cb = ChooseBumps('#cb',{
+  minlength: 2
+});
+```
+
+or anytime later by setting `minlength` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.minlength = 5;
+```
+
+*`options.minlength` accepts a number as input and sets the value to 0 for all other types.*
 
 ####`options.searchfields` (only relevant if `items` are objects)
 
