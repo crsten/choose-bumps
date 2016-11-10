@@ -52,10 +52,6 @@ $hover: #30323F;
 	transform: translateY(-50%);
   z-index: 1;
 
-  &.hide{
-    opacity: 0;
-  }
-
 	path{
 		stroke: #333;
 		stroke-width: 20px;
@@ -165,7 +161,6 @@ $hover: #30323F;
 
 $loader-size: 1em;
 .#{$prefix}loader{
-  opacity: 0;
   position: absolute;
   top: 50%;
   margin-top: -$loader-size/2;
@@ -175,12 +170,8 @@ $loader-size: 1em;
   border: 2px solid;
   border-top-color: transparent;
   border-radius: 50%;
-  transition: opacity .2s ease;
   animation: #{$prefix}-spin .5s infinite linear;
-
-  &.active{
-    opacity: 1;
-  }
+  display: none;
 
   @keyframes #{$prefix}-spin{
     100%{

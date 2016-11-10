@@ -331,9 +331,8 @@ function ChooseBumps(element,options) {
 		} else {
 			if(!Selected) return [].slice.call(mainItem.querySelectorAll('.cb-selected-item,.cb-tag')).forEach( e => mainItem.removeChild(e));
 			let item = document.createElement('div');
-				item.className = 'cb-selected-item';
-				item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
-
+			item.className = 'cb-selected-item';
+			item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
 
 			let previousItem = Element.querySelector('.cb-selected-item');
 			if(previousItem) mainItem.removeChild(previousItem);
@@ -363,11 +362,11 @@ function ChooseBumps(element,options) {
 
 	function toggleLoader(state) {
 		if(state) {
-			LoadingContainer.classList.add('active');
-			Element.querySelector('.cb-caret').classList.add('hide');
+			LoadingContainer.style.display = 'block';
+			Element.querySelector('.cb-caret').style.display = 'none';
 		}else{
-			LoadingContainer.classList.remove('active');
-			Element.querySelector('.cb-caret').classList.remove('hide');
+			LoadingContainer.style.display = '';
+			Element.querySelector('.cb-caret').style.display = '';
 		}
 	}
 

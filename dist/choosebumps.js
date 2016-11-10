@@ -354,11 +354,11 @@ function ChooseBumps(element, options) {
 
 	function toggleLoader(state) {
 		if (state) {
-			LoadingContainer.classList.add('active');
-			Element.querySelector('.cb-caret').classList.add('hide');
+			LoadingContainer.style.display = 'block';
+			Element.querySelector('.cb-caret').style.display = 'none';
 		} else {
-			LoadingContainer.classList.remove('active');
-			Element.querySelector('.cb-caret').classList.remove('hide');
+			LoadingContainer.style.display = '';
+			Element.querySelector('.cb-caret').style.display = '';
 		}
 	}
 
