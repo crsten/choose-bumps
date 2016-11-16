@@ -69,8 +69,18 @@ $hover: #30323F;
 	left: -1px;
 	z-index: 1;
 	background: white;
-    box-shadow: 0 15px 35px -10px rgba(black,0.3);
+  box-shadow: 0 15px 35px -10px rgba(black,0.3);
 	border: 1px solid $border;
+
+  &:empty:not([no-results-text]){
+    display: none!important;
+  }
+
+  &[no-results-text]:after{
+    content: attr(no-results-text);
+    padding: 1em;
+    display: block;
+  }
 
 	& > div{
 		padding: 1em;

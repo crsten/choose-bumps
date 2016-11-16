@@ -17,6 +17,7 @@ function ChooseBumps(element,options) {
 	let isOpen = false;
 	let SearchFields = null;
 	let Placeholder = null;
+	let NoResults = null;
 	let Multiple = false;
 	let Categorize = null;
 	let Template = '';
@@ -38,6 +39,7 @@ function ChooseBumps(element,options) {
 		items: [],
 		search: false,
 		searchfields: '',
+		noresults: '',
 		multiple: false,
 		template: '{{data}}',
 		tagtemplate: null,
@@ -203,11 +205,15 @@ function ChooseBumps(element,options) {
 				SearchBox.setAttribute('autocomplete','off');
 
 				SearchBox.addEventListener('keyup',function KeyUp(e) {
+					ItemContainer.removeAttribute('no-results-text');
 					if(new RegExp('38|40|13').test(e.keyCode) === false && this.value.length >= MinLength) {
 						TypeTreshold && clearTimeout(TypeTreshold);
 						TypeTreshold = setTimeout(function(){
 							search(SearchBox.value,function(result){
 								if(/{{.*}}/ig.test(FetchUrl)) Items = result;
+
+								if(!Items.length && NoResults) ItemContainer.setAttribute('no-results-text',NoResults.replace('{{query}}',SearchBox.value));
+
 								renderItems(result);
 								SelectedIndex = null;
 								selectNext();
@@ -461,6 +467,13 @@ function ChooseBumps(element,options) {
 		'placeholder': {
 			get: () => Placeholder,
 			set: setPlaceholder
+		},
+		'noresults': {
+			get: () => NoResults,
+			set: (value) => {
+				if(typeof value === 'string') NoResults = value;
+				else NoResults = null;
+			}
 		},
 		'multiple': {
 			get: () => Multiple,

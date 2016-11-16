@@ -44,6 +44,12 @@
   background: white;
   box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.3);
   border: 1px solid #eaeaea; }
+  .cb-items:empty:not([no-results-text]) {
+    display: none !important; }
+  .cb-items[no-results-text]:after {
+    content: attr(no-results-text);
+    padding: 1em;
+    display: block; }
   .cb-items > div {
     padding: 1em;
     cursor: default; }

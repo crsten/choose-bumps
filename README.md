@@ -56,6 +56,7 @@ ChooseBumps(element,{
   minlength: 0,
   search: false,
   searchfields: '',
+  noresults: '',
   multiple: false,
   template: '{{data}}',
   tagtemplate: null, //inherits from template if null
@@ -149,6 +150,30 @@ cb.placeholder = 'Have you choosen already?';
 ```
 
 *`options.placeholder` accepts a string as input and ignores all other types.*
+
+####`options.noresults`
+
+If you are using the `options.search` property, you can show a "no results" text if the current query doesn't return any results.
+
+By default `options.noresults` is not set. You can change the noresults text either by sending them in to the options at initialization:
+
+```js
+var cb = ChooseBumps('#cb',{
+  noresults: 'Did not find any results for {{query}}'
+});
+```
+
+or anytime later by setting `noresults` for the returned `choosebumps` instance:
+
+```js
+var cb = ChooseBumps('#cb');
+//Some lines later...
+cb.noresults = 'Did not find any results for {{query}}';
+```
+
+*Hint* `{{query}}` gets replaced with the current search term.
+
+*`options.noresults` accepts a string as input and ignores all other types.*
 
 ####`options.search`
 
