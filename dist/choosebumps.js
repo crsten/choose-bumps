@@ -576,6 +576,11 @@ function ChooseBumps(element, options) {
 
 	this.select = function Select(item) {
 		if (!item) return Reset();
+
+		if (FetchUrl && /{{.*}}/ig.test(FetchUrl)) {
+			Items = [item];
+		}
+
 		var match = Items.reduce(function (m, i) {
 			return m = isEquivalent(item, i) ? i : m;
 		}, null);
