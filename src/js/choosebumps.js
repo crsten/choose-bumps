@@ -17,6 +17,7 @@ function ChooseBumps(element,options) {
 	let isOpen = false;
 	let SearchFields = null;
 	let Placeholder = null;
+	let NoResults = null;
 	let Multiple = false;
 	let Categorize = null;
 	let Template = '';
@@ -38,6 +39,7 @@ function ChooseBumps(element,options) {
 		items: [],
 		search: false,
 		searchfields: '',
+		noresults: '',
 		multiple: false,
 		template: '{{data}}',
 		tagtemplate: null,
@@ -203,11 +205,15 @@ function ChooseBumps(element,options) {
 				SearchBox.setAttribute('autocomplete','off');
 
 				SearchBox.addEventListener('keyup',function KeyUp(e) {
+					ItemContainer.removeAttribute('no-results-text');
 					if(new RegExp('38|40|13').test(e.keyCode) === false && this.value.length >= MinLength) {
 						TypeTreshold && clearTimeout(TypeTreshold);
 						TypeTreshold = setTimeout(function(){
 							search(SearchBox.value,function(result){
 								if(/{{.*}}/ig.test(FetchUrl)) Items = result;
+
+								if(!Items.length && NoResults) ItemContainer.setAttribute('no-results-text',NoResults.replace('{{query}}',SearchBox.value));
+
 								renderItems(result);
 								SelectedIndex = null;
 								selectNext();
@@ -331,9 +337,8 @@ function ChooseBumps(element,options) {
 		} else {
 			if(!Selected) return [].slice.call(mainItem.querySelectorAll('.cb-selected-item,.cb-tag')).forEach( e => mainItem.removeChild(e));
 			let item = document.createElement('div');
-				item.className = 'cb-selected-item';
-				item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
-
+			item.className = 'cb-selected-item';
+			item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
 
 			let previousItem = Element.querySelector('.cb-selected-item');
 			if(previousItem) mainItem.removeChild(previousItem);
@@ -363,11 +368,11 @@ function ChooseBumps(element,options) {
 
 	function toggleLoader(state) {
 		if(state) {
-			LoadingContainer.classList.add('active');
-			Element.querySelector('.cb-caret').classList.add('hide');
+			LoadingContainer.style.display = 'block';
+			Element.querySelector('.cb-caret').style.display = 'none';
 		}else{
-			LoadingContainer.classList.remove('active');
-			Element.querySelector('.cb-caret').classList.remove('hide');
+			LoadingContainer.style.display = '';
+			Element.querySelector('.cb-caret').style.display = '';
 		}
 	}
 
@@ -462,6 +467,13 @@ function ChooseBumps(element,options) {
 		'placeholder': {
 			get: () => Placeholder,
 			set: setPlaceholder
+		},
+		'noresults': {
+			get: () => NoResults,
+			set: (value) => {
+				if(typeof value === 'string') NoResults = value;
+				else NoResults = null;
+			}
 		},
 		'multiple': {
 			get: () => Multiple,

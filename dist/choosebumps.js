@@ -19,6 +19,7 @@ function ChooseBumps(element, options) {
 	var isOpen = false;
 	var SearchFields = null;
 	var Placeholder = null;
+	var NoResults = null;
 	var Multiple = false;
 	var Categorize = null;
 	var Template = '';
@@ -40,6 +41,7 @@ function ChooseBumps(element, options) {
 		items: [],
 		search: false,
 		searchfields: '',
+		noresults: '',
 		multiple: false,
 		template: '{{data}}',
 		tagtemplate: null,
@@ -203,11 +205,15 @@ function ChooseBumps(element, options) {
 				SearchBox.setAttribute('autocomplete', 'off');
 
 				SearchBox.addEventListener('keyup', function KeyUp(e) {
+					ItemContainer.removeAttribute('no-results-text');
 					if (new RegExp('38|40|13').test(e.keyCode) === false && this.value.length >= MinLength) {
 						TypeTreshold && clearTimeout(TypeTreshold);
 						TypeTreshold = setTimeout(function () {
 							search(SearchBox.value, function (result) {
 								if (/{{.*}}/ig.test(FetchUrl)) Items = result;
+
+								if (!Items.length && NoResults) ItemContainer.setAttribute('no-results-text', NoResults.replace('{{query}}', SearchBox.value));
+
 								renderItems(result);
 								SelectedIndex = null;
 								selectNext();
@@ -354,11 +360,11 @@ function ChooseBumps(element, options) {
 
 	function toggleLoader(state) {
 		if (state) {
-			LoadingContainer.classList.add('active');
-			Element.querySelector('.cb-caret').classList.add('hide');
+			LoadingContainer.style.display = 'block';
+			Element.querySelector('.cb-caret').style.display = 'none';
 		} else {
-			LoadingContainer.classList.remove('active');
-			Element.querySelector('.cb-caret').classList.remove('hide');
+			LoadingContainer.style.display = '';
+			Element.querySelector('.cb-caret').style.display = '';
 		}
 	}
 
@@ -457,6 +463,14 @@ function ChooseBumps(element, options) {
 				return Placeholder;
 			},
 			set: setPlaceholder
+		},
+		'noresults': {
+			get: function get() {
+				return NoResults;
+			},
+			set: function set(value) {
+				if (typeof value === 'string') NoResults = value;else NoResults = null;
+			}
 		},
 		'multiple': {
 			get: function get() {

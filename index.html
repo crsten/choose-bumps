@@ -230,8 +230,10 @@
 			items: 'http://data.brreg.no/enhetsregisteret/enhet.json?$filter=startswith%28navn%2C%27{{query}}%27%29',
 			search:true,
 			placeholder: 'Search for companies...',
+			noresults: 'Found no results for "{{query}}"',
 			minlength: 2,
 			processing: function(result) {
+				if(!result.data) return [];
 				return result.data.map(function(entry) {
 					return {
 						name: entry.navn,

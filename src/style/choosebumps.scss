@@ -52,10 +52,6 @@ $hover: #30323F;
 	transform: translateY(-50%);
   z-index: 1;
 
-  &.hide{
-    opacity: 0;
-  }
-
 	path{
 		stroke: #333;
 		stroke-width: 20px;
@@ -73,8 +69,18 @@ $hover: #30323F;
 	left: -1px;
 	z-index: 1;
 	background: white;
-    box-shadow: 0 15px 35px -10px rgba(black,0.3);
+  box-shadow: 0 15px 35px -10px rgba(black,0.3);
 	border: 1px solid $border;
+
+  &:empty:not([no-results-text]){
+    display: none!important;
+  }
+
+  &[no-results-text]:after{
+    content: attr(no-results-text);
+    padding: 1em;
+    display: block;
+  }
 
 	& > div{
 		padding: 1em;
@@ -165,7 +171,6 @@ $hover: #30323F;
 
 $loader-size: 1em;
 .#{$prefix}loader{
-  opacity: 0;
   position: absolute;
   top: 50%;
   margin-top: -$loader-size/2;
@@ -175,12 +180,8 @@ $loader-size: 1em;
   border: 2px solid;
   border-top-color: transparent;
   border-radius: 50%;
-  transition: opacity .2s ease;
   animation: #{$prefix}-spin .5s infinite linear;
-
-  &.active{
-    opacity: 1;
-  }
+  display: none;
 
   @keyframes #{$prefix}-spin{
     100%{
