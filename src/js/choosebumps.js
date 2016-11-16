@@ -359,6 +359,9 @@ function ChooseBumps(element,options) {
 				if(this.status >= 200 && this.status < 400) {
 					cb((Processing) ? Processing(JSON.parse(this.responseText)) : JSON.parse(this.responseText));
 					Fetch = null;
+				}else{
+					cb([]);
+					Fetch = null;
 				}
 			}
 		}
