@@ -426,7 +426,7 @@ cb.onadd = null;
 
 With `choosebumps.select` you can programmaticaly set the selected item.
 
-The function will take the item to be selected as parameter. **Only items that are in `options.items` can be selected!**
+The function will take the item to be selected as parameter. **Only items that are in `options.items` can be selected! (Unless items is an url which get items dynamically)**
 
 **If the parameter is null, reset gets called!**
 
