@@ -25,6 +25,12 @@ $hover: #30323F;
 
 	box-sizing: border-box;
 
+  &.#{$prefix}-active,
+  &:focus{
+    border-color: #ccc;
+    outline: none;
+  }
+
 	*,
 	*:before,
 	*:after{
@@ -65,12 +71,13 @@ $hover: #30323F;
 	max-height: 300px;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
-	top:100%;
+	top: calc(100% + 1px);
 	left: -1px;
-	z-index: 1;
+	z-index: 2;
 	background: white;
   box-shadow: 0 15px 35px -10px rgba(black,0.3);
 	border: 1px solid $border;
+  border-top: none;
 
   &:empty:not([no-results-text]){
     display: none!important;

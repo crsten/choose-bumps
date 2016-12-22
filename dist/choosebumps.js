@@ -78,12 +78,14 @@ function ChooseBumps(element, options) {
 	/* Interactions */
 
 	function setOpened(state) {
+		state = typeof state === 'boolean' ? state : !isOpen;
 		if (state === true) {
 			renderItems();
 			Element.classList.add('cb-active');
 			ItemContainer.scrollTop = 0;
 			document.addEventListener('click', setOpened);
 			document.addEventListener('keydown', ArrowNavigation);
+			document.addEventListener('keyup', onEscape);
 			focusSearch();
 			isOpen = true;
 		} else {
@@ -91,9 +93,14 @@ function ChooseBumps(element, options) {
 			Element.classList.remove('cb-active');
 			document.removeEventListener('click', setOpened);
 			document.removeEventListener('keydown', ArrowNavigation);
+			document.removeEventListener('keyup', onEscape);
 			SelectedIndex = null;
 			isOpen = false;
 		}
+	}
+
+	function onEscape(e) {
+		if (e.keyCode === 27) setOpened(false);
 	}
 
 	function ArrowNavigation(e) {
@@ -112,7 +119,9 @@ function ChooseBumps(element, options) {
 					onAdd(e.target.value);
 					return e.target.value = '';
 				}
-				if (SelectedIndex < 0) return;
+				if (SelectedIndex === undefined || SelectedIndex === null || SelectedIndex < 0) {
+					return setOpened();
+				};
 				selectItem(Items[parseInt(ItemContainer.children[SelectedIndex].getAttribute('data-id'), 10)], true);
 				SelectedIndex = null;
 				break;
@@ -299,9 +308,13 @@ function ChooseBumps(element, options) {
 		LoadingContainer.className = 'cb-loader';
 		Element.appendChild(LoadingContainer);
 
-		Element.querySelector('.cb-main-item').addEventListener('click', function (e) {
+		MainItem.addEventListener('click', function (e) {
 			e.stopPropagation();
 			setOpened(!isOpen);
+		});
+
+		Element.addEventListener('keypress', function (e) {
+			if (e.keyCode === 13) setOpened();
 		});
 	}
 
