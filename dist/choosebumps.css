@@ -7,6 +7,8 @@
   outline: none;
   position: relative;
   box-sizing: border-box; }
+  .choosebumps.cb--active, .choosebumps:focus {
+    border-color: #ccc; }
   .choosebumps *,
   .choosebumps *:before,
   .choosebumps *:after {
@@ -15,6 +17,8 @@
 .cb-main-item {
   padding: 1em 3em 1em 1em;
   cursor: default; }
+  .cb-main-item:focus {
+    outline: none; }
   .cb-main-item.cb-placeholder:before {
     content: attr(placeholder);
     opacity: .4; }
@@ -38,12 +42,13 @@
   max-height: 300px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  top: 100%;
+  top: calc(100% + 1px);
   left: -1px;
-  z-index: 1;
+  z-index: 2;
   background: white;
   box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.3);
-  border: 1px solid #eaeaea; }
+  border: 1px solid #eaeaea;
+  border-top: none; }
   .cb-items:empty:not([no-results-text]) {
     display: none !important; }
   .cb-items[no-results-text]:after {
