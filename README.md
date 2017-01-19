@@ -101,7 +101,19 @@ cb.items = [5,6,7];
 You can also send in a string(URL) which will be fetched either dynamically when searching or when the property is being set.
 If you want search dynamically with `choosebumps` replace the part that should be changed in the URL with `{{query}}`. It will then make a new call everytime the searchphrase changes.
 
+```js
+items = 'https://www.yourawsomepage.com/api/user?q={{query}}' //will fetch this url and replace {{query}} with the users input
+```
+
 It is also possible to send in a function which will be called dynamically. The function recieves 2 arguments: `function(query, callback)`. Simply call the callback function with your result when you are done.
+
+```js
+items = function(query, cb) {
+  //Do some fetching or whatever here...
+  //Query is the users input (if search = true else null)
+  cb(RESULTARRAY) //call the callback function with the result as parameter when you are done!
+}
+```
 
 *`options.items` accepts an array, string(url) or function as input and ignores all other types.*
 
