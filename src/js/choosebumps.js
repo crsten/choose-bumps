@@ -31,6 +31,7 @@ function ChooseBumps(element,options) {
 	let TypeTreshold = null;
 	let Fetch = null;
 	let FetchUrl = null;
+	let ItemFunction = null;
 	let MinLength = 0;
 	let Items = [];
 
@@ -220,7 +221,7 @@ function ChooseBumps(element,options) {
 						TypeTreshold = setTimeout(function(){
 							search(SearchBox.value,function(result){
 								if(/{{.*}}/ig.test(FetchUrl)) Items = result;
-
+								if(ItemFunction) Items = result;
 								if(!Items.length && NoResults) ItemContainer.setAttribute('no-results-text',NoResults.replace('{{query}}',SearchBox.value));
 
 								renderItems(result);
@@ -255,6 +256,14 @@ function ChooseBumps(element,options) {
 
 		if(/{{.*}}/ig.test(FetchUrl)) {
 			fetchItems(FetchUrl.replace(/{{query}}/,query),cb);
+		}
+		else if(ItemFunction){
+			toggleLoader(true);
+			ItemFunction(query, function(result){
+				cb((Processing) ? Processing(result) : result);
+				toggleLoader(false);
+			})
+
 		}else{
 			cb(Items.filter(function Filter(x) {
 				if(SearchFields) {
@@ -457,7 +466,7 @@ function ChooseBumps(element,options) {
 			}
 		},
 		'items': {
-			get: () => FetchUrl || Items,
+			get: () => FetchUrl || ItemFunction || Items,
 			set: (x) => {
 				if(x instanceof Array) Items = x;
 				else if(typeof x == 'string') {
@@ -465,6 +474,9 @@ function ChooseBumps(element,options) {
 					if(!(/{{.*}}/ig.test(FetchUrl))) fetchItems(FetchUrl,function(result) {
 						Items = result;
 					});
+				}
+				else if(typeof x == 'function') {
+					ItemFunction = x;
 				}
 				else console.error('Items must be an array or URL.');
 			}

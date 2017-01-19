@@ -8,7 +8,8 @@
   position: relative;
   box-sizing: border-box; }
   .choosebumps.cb--active, .choosebumps:focus {
-    border-color: #ccc; }
+    border-color: #ccc;
+    outline: none; }
   .choosebumps *,
   .choosebumps *:before,
   .choosebumps *:after {
@@ -17,8 +18,6 @@
 .cb-main-item {
   padding: 1em 3em 1em 1em;
   cursor: default; }
-  .cb-main-item:focus {
-    outline: none; }
   .cb-main-item.cb-placeholder:before {
     content: attr(placeholder);
     opacity: .4; }
