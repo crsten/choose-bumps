@@ -476,7 +476,20 @@ function ChooseBumps(element,options) {
 					});
 				}
 				else if(typeof x == 'function') {
+
 					ItemFunction = x;
+
+					toggleLoader(true);
+					ItemFunction(null,function(result) {
+						if(result instanceof Array){
+							if(Processing) Items = Processing(result)
+							else Items = result;
+						}else{
+							Items = [];
+						}
+						toggleLoader(false);
+					});
+
 				}
 				else console.error('Items must be an array or URL.');
 			}
