@@ -184,7 +184,11 @@ function ChooseBumps(element, options) {
 		resetSearch();
 
 		if (Multiple) {
-			if (Selected && Selected.indexOf(item) < 0) Selected.push(item);else Selected = [item];
+			if (!Selected || !Selected.reduce(function (m, i) {
+				return m || isEquivalent(item, i);
+			}, false)) {
+				if (Selected) Selected.push(item);else Selected = [item];
+			}
 
 			renderItems();
 			if (event) event.stopPropagation();
@@ -403,7 +407,9 @@ function ChooseBumps(element, options) {
 		var previousItem = null;
 		Items.forEach(function (item, index) {
 			if (items && items.indexOf(item) < 0) return;
-			if (Multiple && Selected && Selected.indexOf(item) > -1 || !Multiple && Selected === item) return;
+			if (Multiple && Selected && Selected.reduce(function (m, i) {
+				return m || isEquivalent(item, i);
+			}, false) || !Multiple && Selected === item) return;
 			var option = document.createElement('div');
 			option.setAttribute('data-id', index);
 			option.innerHTML = parseTemplate(item, Template);
@@ -614,9 +620,9 @@ function ChooseBumps(element, options) {
 			Items = [item];
 		}
 
-		var match = Items.reduce(function (m, i) {
+		var match = Items.length ? Items.reduce(function (m, i) {
 			return m = isEquivalent(item, i) ? i : m;
-		}, null);
+		}, null) : item;
 		if (match) selectItem(match);
 	};
 
