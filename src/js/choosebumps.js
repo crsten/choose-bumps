@@ -457,13 +457,13 @@ function ChooseBumps(element,options) {
 
 	Object.defineProperties(this,{
 		'element': {
-			get: () => Element,
+			get: () => MainElement,
 			set: (x) => {
 				if(typeof x === 'string') {
 					let el = document.querySelector(x);
-					if(el) Element = el;
+					if(el) MainElement = el;
 					else console.error('Element not found.');
-				}else if(x instanceof HTMLElement) Element = x;
+				}else if(x instanceof HTMLElement) MainElement = x;
 				else console.error('Invalid argument');
 			}
 		},
