@@ -9,7 +9,7 @@
 function ChooseBumps(element,options) {
 	if(this instanceof ChooseBumps === false) return new ChooseBumps(element,options);
 
-	let Element = null;
+	let MainElement = null;
 	let ItemContainer = null;
 	let LoadingContainer = null;
 	let Search = false;
@@ -55,9 +55,9 @@ function ChooseBumps(element,options) {
 
 	function init() {
 		this.element = element;
-		Element.classList.add('choosebumps');
-		Element.setAttribute('tabindex',0);
-		if(Element.getAttribute('placeholder')) defaults.placeholder = Element.getAttribute('placeholder');
+		MainElement.classList.add('choosebumps');
+		MainElement.setAttribute('tabindex',0);
+		if(MainElement.getAttribute('placeholder')) defaults.placeholder = MainElement.getAttribute('placeholder');
 		renderHTML();
 
 		setArgs.call(this,options || {});
@@ -66,7 +66,7 @@ function ChooseBumps(element,options) {
 	function setPlaceholder(x) {
 		if(typeof x !== 'string') return console.error('Placeholder must be a string.');
 		Placeholder = x;
-		Element.querySelector('.cb-main-item').setAttribute('placeholder',Placeholder);
+		MainElement.querySelector('.cb-main-item').setAttribute('placeholder',Placeholder);
 	}
 
 	function setMultiple(state) {
@@ -80,7 +80,7 @@ function ChooseBumps(element,options) {
 		state = (typeof state === 'boolean') ? state : !isOpen ;
 		if(state === true) {
 			renderItems();
-			Element.classList.add('cb-active');
+			MainElement.classList.add('cb-active');
 			ItemContainer.scrollTop = 0;
 			document.addEventListener('click',setOpened);
 			document.addEventListener('keydown',ArrowNavigation);
@@ -90,7 +90,7 @@ function ChooseBumps(element,options) {
 		}
 		else {
 			resetSearch();
-			Element.classList.remove('cb-active');
+			MainElement.classList.remove('cb-active');
 			document.removeEventListener('click',setOpened);
 			document.removeEventListener('keydown',ArrowNavigation);
 			document.removeEventListener('keyup', onEscape);
@@ -139,7 +139,7 @@ function ChooseBumps(element,options) {
 			Selected = null;
 		}
 
-		if(!Selected) Element.querySelector('.cb-main-item').classList.add('cb-placeholder');
+		if(!Selected) MainElement.querySelector('.cb-main-item').classList.add('cb-placeholder');
 		if(onRemove && triggerCallback) onRemove(item);
 		renderSelection();
 		renderItems();
@@ -180,7 +180,7 @@ function ChooseBumps(element,options) {
     }
 
 	function selectItem(item,triggerCallback,event) {
-		Element.querySelector('.cb-main-item').classList.remove('cb-placeholder');
+		MainElement.querySelector('.cb-main-item').classList.remove('cb-placeholder');
 		resetSearch();
 
 		if(Multiple) {
@@ -209,7 +209,7 @@ function ChooseBumps(element,options) {
 		Search = (state) ? true : false;
 
 		if(Search) {
-			Element.classList.add('cb-search-enabled');
+			MainElement.classList.add('cb-search-enabled');
 			let SearchBox = document.createElement('input');
 				SearchBox.className = 'cb-search';
 				SearchBox.setAttribute('type','text');
@@ -238,18 +238,18 @@ function ChooseBumps(element,options) {
 					this.setAttribute('size',this.value.length + 1);
 				});
 
-			Element.querySelector('.cb-main-item').appendChild(SearchBox);
-		}else Element.classList.remove('cb-search-enabled');
+			MainElement.querySelector('.cb-main-item').appendChild(SearchBox);
+		}else MainElement.classList.remove('cb-search-enabled');
 	}
 
     function resetSearch() {
 		if(!Search) return;
-		Element.querySelector('.cb-search').value = '';
+		MainElement.querySelector('.cb-search').value = '';
 	}
 
 	function focusSearch() {
 		if(!Search) return;
-		Element.querySelector('.cb-search').focus();
+		MainElement.querySelector('.cb-search').focus();
 	}
 
 	function search(query,cb) {
@@ -317,32 +317,32 @@ function ChooseBumps(element,options) {
 					</svg>`;
 
 		MainItem.innerHTML += Caret;
-		Element.appendChild(MainItem);
+		MainElement.appendChild(MainItem);
 
 		ItemContainer = document.createElement('div');
 		ItemContainer.className = 'cb-items';
-		Element.appendChild(ItemContainer);
+		MainElement.appendChild(ItemContainer);
 
 		LoadingContainer = document.createElement('div');
 		LoadingContainer.className = 'cb-loader';
-		Element.appendChild(LoadingContainer);
+		MainElement.appendChild(LoadingContainer);
 
 		MainItem.addEventListener('click',(e) => {
 			e.stopPropagation();
 			setOpened(!isOpen);
 		});
 
-		Element.addEventListener('keypress',(e) => {
+		MainElement.addEventListener('keypress',(e) => {
 			if(e.keyCode === 13) setOpened();
 		});
 	}
 
 	function renderSelection() {
 
-		let mainItem = Element.querySelector('.cb-main-item');
+		let mainItem = MainElement.querySelector('.cb-main-item');
 
 		if(Multiple) {
-			[].slice.call(Element.querySelectorAll('.cb-main-item .cb-tag')).forEach((t) => {
+			[].slice.call(MainElement.querySelectorAll('.cb-main-item .cb-tag')).forEach((t) => {
 				mainItem.removeChild(t);
 			});
 
@@ -364,7 +364,7 @@ function ChooseBumps(element,options) {
 			item.className = 'cb-selected-item';
 			item.innerHTML = parseTemplate(Selected,SelectedTemplate || Template);
 
-			let previousItem = Element.querySelector('.cb-selected-item');
+			let previousItem = MainElement.querySelector('.cb-selected-item');
 			if(previousItem) mainItem.removeChild(previousItem);
 			mainItem.insertBefore(item,mainItem.children[mainItem.children.length - 1]);
 		}
@@ -396,10 +396,10 @@ function ChooseBumps(element,options) {
 	function toggleLoader(state) {
 		if(state) {
 			LoadingContainer.style.display = 'block';
-			Element.querySelector('.cb-caret').style.display = 'none';
+			MainElement.querySelector('.cb-caret').style.display = 'none';
 		}else{
 			LoadingContainer.style.display = '';
-			Element.querySelector('.cb-caret').style.display = '';
+			MainElement.querySelector('.cb-caret').style.display = '';
 		}
 	}
 
