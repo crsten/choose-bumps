@@ -7,15 +7,15 @@
 
 A dropdown so simple it will give you choose-bumps! Written in pure vanillajs
 
-##Inspiration
+## Inspiration
 
 Have you ever wanted a simple dropdown library that doesn't depend on bloated frameworks? Well i did! Have fun :)
 
-##Demo
+## Demo
 
 You can find a small [demo here](http://crsten.github.io/choose-bumps/).
 
-##Installation
+## Installation
 
 You can get it on npm.
 
@@ -31,19 +31,19 @@ bower install choosebumps --save
 
 If you're not using either package manager, you can use `choosebumps` by downloading the [files in the `dist` folder](dist).
 
-####Including the JavaScript
+#### Including the JavaScript
 
 Place `choosebumps` in the end of `<body>`.
 
-####Including the CSS
+#### Including the CSS
 
 Place [`dist/choosebumps.css`](dist/choosebumps.css) or [`dist/choosebumps.min.css`](dist/choosebumps.min.css) in your document.
 
-#Usage
+# Usage
 
 Choosebumps provides the easiest possible API to make dropdowns breeze in your applications.
 
-##`ChooseBumps(element,options?)`
+## `ChooseBumps(element,options?)`
 
 `element` can either be a string (selector) or an `HTMLElement` (not a jQuery element)
 
@@ -80,7 +80,7 @@ cb.reset();
 
 The options/functions are detailed below. **All the options can be set at initialization or anytime later when you feel for it(even if `choosebumps` is open or whatever)**
 
-####`options.items`
+#### `options.items`
 
 By default `choosebumps` has no items. You can add items either by sending them in to the options at initialization:
 
@@ -117,7 +117,7 @@ items = function(query, cb) {
 
 *`options.items` accepts an array, string(url) or function as input and ignores all other types.*
 
-####`options.processing`
+#### `options.processing`
 
 If you need to preprocess the fetched data before passing it to `choosebumps` you can do it with the `options.processing` property. You can set it at initialization:
 
@@ -145,7 +145,7 @@ cb.processing = function Your_function(){};
 
 *`options.processing` accepts a function as input and ignores all other types.*
 
-####`options.placeholder`
+#### `options.placeholder`
 
 By default `choosebumps` has `"Choose"` as the placeholder text. You can change the placeholder text either by sending them in to the options at initialization:
 
@@ -165,7 +165,7 @@ cb.placeholder = 'Have you choosen already?';
 
 *`options.placeholder` accepts a string as input and ignores all other types.*
 
-####`options.noresults`
+#### `options.noresults`
 
 If you are using the `options.search` property, you can show a "no results" text if the current query doesn't return any results.
 
@@ -189,7 +189,7 @@ cb.noresults = 'Did not find any results for {{query}}';
 
 *`options.noresults` accepts a string as input and ignores all other types.*
 
-####`options.search`
+#### `options.search`
 
 By default `choosebumps` has disabled `search`. You can activate it either by sending it to the options at initialization:
 
@@ -212,7 +212,7 @@ If you want to define what `choosebumps` should look for remember to set `option
 
 *`options.search` accepts anything as input and checks the input for its thruthiness.*
 
-####`options.minlength`
+#### `options.minlength`
 
 By default `choosebumps` has minlength of 0 which means it will start searching if the length of the input is longer than 0. You can change it either by sending it to the options at initialization:
 
@@ -232,7 +232,7 @@ cb.minlength = 5;
 
 *`options.minlength` accepts a number as input and sets the value to 0 for all other types.*
 
-####`options.searchfields` (only relevant if `items` are objects)
+#### `options.searchfields` (only relevant if `items` are objects)
 
 By default `choosebumps` searches through each property in all `items`. You can define wich fields should be searched by sending a string in to the options at initialization:
 
@@ -252,7 +252,7 @@ cb.searchfields = 'firstname lastname' //Space separated string
 
 *`options.searchfields` accepts a string as input and splits its content by space. All other types are ignored*
 
-####`options.multiple`
+#### `options.multiple`
 
 With `options.multiple` you can allow selection of multiple items.
 
@@ -274,7 +274,7 @@ cb.multiple = false;
 
 *`options.multiple` accepts anything as input and checks the input for its thruthiness.*
 
-####`options.template`
+#### `options.template`
 
 The templating in `choosebumps` is inspired by the moustache library. All variables can be rendered into view by putting the key of the object between `{{` and `}}`. This does also work for nested object. **Be aware that all variables must be prefixed with `data.`**
 
@@ -306,21 +306,21 @@ cb.template = '{{data.name.last}}';
 
 *`options.template` accepts a string as input and ignores all other values.*
 
-####`options.tagtemplate` (only if `options.multiple` is true)
+#### `options.tagtemplate` (only if `options.multiple` is true)
 
 `options.tagtemplate` can be used to set a custom template for the selected item rendering when multiple item selection is enabled.
 It works the same way as `options.template` --> see documentation further up.
 
 If `options.tagtemplate` is not set, it will inherit the template from `options.template`.
 
-####`options.selectedtemplate`
+#### `options.selectedtemplate`
 
 `options.selectedtemplate` can be used to set a custom template for the selected item rendering.
 It works the same way as `options.template` --> see documentation further up.
 
 If `options.selectedtemplate` is not set, it will inherit the template from `options.template`.
 
-####`options.categorize`
+#### `options.categorize`
 
 With `options.categorize` you can categorize the items by string.
 
@@ -356,7 +356,7 @@ cb.categorize = null;
 
 *`options.categorize` accepts a string or null as input and ignores all other types.*
 
-####`options.onselect` (Callback)
+#### `options.onselect` (Callback)
 
 With `options.onselect` you can attach a callback to the select event.
 
@@ -382,7 +382,7 @@ cb.onselect = null;
 
 *`options.onselect` accepts a function or null as input and ignores all other types.*
 
-####`options.onremove` (Callback)
+#### `options.onremove` (Callback)
 
 With `options.onremove` you can attach a callback to the remove event.
 
@@ -408,7 +408,7 @@ cb.onremove = null;
 
 *`options.onremove` accepts a function or null as input and ignores all other types.*
 
-####`options.onadd` (Callback)
+#### `options.onadd` (Callback)
 
 With `options.onadd` you can attach a callback to the add event (works with search mode only).
 
@@ -436,7 +436,7 @@ cb.onadd = null;
 
 *`options.onadd` accepts a function or null as input and ignores all other types.*
 
-####`choosebumps.select` (Function)
+#### `choosebumps.select` (Function)
 
 With `choosebumps.select` you can programmaticaly set the selected item.
 
@@ -454,7 +454,7 @@ var cb = ChooseBumps('#cb',{
 cb.select(4);
 ```
 
-####`choosebumps.remove` (Function)
+#### `choosebumps.remove` (Function)
 
 With `choosebumps.remove` you can programmaticaly remove a selected item.
 
@@ -472,7 +472,7 @@ var cb = ChooseBumps('#cb',{
 cb.remove(4);
 ```
 
-####`choosebumps.reset` (Function)
+#### `choosebumps.reset` (Function)
 
 With `choosebumps.reset` you can programmaticaly remove all selected items.
 

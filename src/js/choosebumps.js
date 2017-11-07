@@ -1,12 +1,12 @@
-"use strict";
-
 /*  ChooseBumps
  *  A dropdown so simple it will give you choose-bumps!
  *  Author: car.jacobsen@gmail.com
  *  License: MIT
  */
 
-function ChooseBumps(element,options) {
+import '../style/choosebumps.scss';
+
+export default function(element,options) {
 	if(this instanceof ChooseBumps === false) return new ChooseBumps(element,options);
 
 	let MainElement = null;
@@ -657,12 +657,4 @@ function ChooseBumps(element,options) {
     };
 
 	return Object.freeze(this);
- }
-
-
-/* Spread it to the world! */
- (function Factory (factory) {
-    if ( typeof define === 'function' && define.amd ) define('ChooseBumps', factory);
-    else if ( typeof exports === 'object' ) module.exports = factory;
-    else window.ChooseBumps = factory;
-})(ChooseBumps);
+}
