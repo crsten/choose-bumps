@@ -89,7 +89,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/* harmony default export */ __webpack_exports__["default"] = (function (element, options) {
+function ChooseBumps(element, options) {
 	if (this instanceof ChooseBumps === false) return new ChooseBumps(element, options);
 
 	let MainElement = null;
@@ -710,7 +710,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	};
 
 	return Object.freeze(this);
-});
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (ChooseBumps);
 
 /***/ }),
 /* 1 */
