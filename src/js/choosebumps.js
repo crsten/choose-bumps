@@ -6,7 +6,7 @@
 
 import '../style/choosebumps.scss';
 
-export default function(element,options) {
+function ChooseBumps(element,options) {
 	if(this instanceof ChooseBumps === false) return new ChooseBumps(element,options);
 
 	let MainElement = null;
@@ -658,3 +658,5 @@ export default function(element,options) {
 
 	return Object.freeze(this);
 }
+
+export default ChooseBumps;
