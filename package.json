@@ -1,5 +1,6 @@
 {
   "name": "choosebumps",
+  "version": "0.0.0-development",
   "description": "A dropdown so simple it will give you choose-bumps! Written in pure vanillajs",
   "main": "dist/choosebumps.min.js",
   "scripts": {
