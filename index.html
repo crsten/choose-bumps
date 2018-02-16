@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
@@ -8,63 +9,68 @@
 	<link rel="stylesheet" href="dist/choosebumps.css">
 
 	<style>
-		html{
+		html {
 			font-family: 'Raleway';
 		}
-		body{
+
+		body {
 			min-height: 100vh;
-			margin:0;
+			margin: 0;
 			padding-bottom: 300px;
 		}
 
-		h1{
+		h1 {
 			text-align: center;
 			padding: 1em;
 			font-size: 2.5em;
-			margin:0;
+			margin: 0;
 			color: white;
 			background: #30323f;
 		}
-		h1 span{
+
+		h1 span {
 			font-size: .5em;
 			opacity: .5;
 		}
 
-		.img{
+		.img {
 			width: 30px;
-		    height: 30px;
-		    display: inline-block;
-		    background-size: cover;
-		    background-repeat: no-repeat;
-		    background-position: center;
-		    margin-right: 20px;
-		    border-radius: 100%;
-		    vertical-align: bottom;
+			height: 30px;
+			display: inline-block;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
+			margin-right: 20px;
+			border-radius: 100%;
+			vertical-align: bottom;
 		}
 
-		.container{
+		.container {
 			padding: 2em;
-			display:-webkit-box;
-			display:-webkit-flex;
-			display:-ms-flexbox;
-			display:flex;
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
 			-webkit-box-align: center;
 			-webkit-align-items: center;
 			-ms-flex-align: center;
-			        align-items: center;
+			align-items: center;
 			-webkit-box-pack: center;
 			-webkit-justify-content: center;
 			-ms-flex-pack: center;
-			        justify-content: center;
+			justify-content: center;
 		}
 
-		.container > div{
+		.container>div {
 			max-width: 500px;
 		}
 	</style>
 </head>
+
 <body>
-	<h1>ChooseBumps<span> . js</span></h1>
+	<h1>ChooseBumps
+		<span> . js</span>
+	</h1>
 
 	<div class="container">
 		<div style="width:100%;">
@@ -112,129 +118,129 @@
 
 	<script>
 		var content = [{
-				value: 1,
-				category: 'Family Guy',
-				text: 'Peter Griffin',
-				family: 'Griffin',
-				img: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSRCUx4mvj66glTvOC9NUXTuWm8oL0jgU_pb8hd1oOdxOB4dalmvA'
-			},
-			{
-				value: 2,
-				category: 'Family Guy',
-				text: 'Lois Griffin',
-				family: 'Griffin',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 3,
-				category: 'Family Guy',
-				text: 'Chris Griffin',
-				family: 'Griffin',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 4,
-				category: 'Family Guy',
-				text: 'Meg(atron) Griffin',
-				family: 'Griffin',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 5,
-				category: 'Family Guy',
-				text: 'Brian Griffin',
-				family: 'Griffin',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 6,
-				category: 'American Dad',
-				text: 'Roger',
-				family: 'Smith',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 7,
-				category: 'Family Guy',
-				text: 'Stewie Griffin',
-				family: 'Griffin',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 8,
-				category: 'American Dad',
-				text: 'Stan Smith',
-				family: 'Smith',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 9,
-				category: 'Family Guy',
-				text: 'John Herbert',
-				family: 'Herbert',
-				img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
-			},
-			{
-				value: 10,
-				category: 'The Simpsons',
-				text: 'Homer Simpson',
-				family: 'Simpson',
-				img: 'https://cdn4.iconfinder.com/data/icons/smashicons-movies-flat/60/50_-_Homer_Flat-128.png'
-			},
-			{
-				value: 11,
-				category: 'The Simpsons',
-				text: 'Marge Simpson',
-				family: 'Simpson',
-				img: 'https://cdn4.iconfinder.com/data/icons/smashicons-movies-flat/60/49_-_Marge_Flat-128.png'
-			}
-			];
+			value: 1,
+			category: 'Family Guy',
+			text: 'Peter Griffin',
+			family: 'Griffin',
+			img: 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSRCUx4mvj66glTvOC9NUXTuWm8oL0jgU_pb8hd1oOdxOB4dalmvA'
+		},
+		{
+			value: 2,
+			category: 'Family Guy',
+			text: 'Lois Griffin',
+			family: 'Griffin',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 3,
+			category: 'Family Guy',
+			text: 'Chris Griffin',
+			family: 'Griffin',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 4,
+			category: 'Family Guy',
+			text: 'Meg(atron) Griffin',
+			family: 'Griffin',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 5,
+			category: 'Family Guy',
+			text: 'Brian Griffin',
+			family: 'Griffin',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 6,
+			category: 'American Dad',
+			text: 'Roger',
+			family: 'Smith',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 7,
+			category: 'Family Guy',
+			text: 'Stewie Griffin',
+			family: 'Griffin',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 8,
+			category: 'American Dad',
+			text: 'Stan Smith',
+			family: 'Smith',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 9,
+			category: 'Family Guy',
+			text: 'John Herbert',
+			family: 'Herbert',
+			img: 'https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png'
+		},
+		{
+			value: 10,
+			category: 'The Simpsons',
+			text: 'Homer Simpson',
+			family: 'Simpson',
+			img: 'https://cdn4.iconfinder.com/data/icons/smashicons-movies-flat/60/50_-_Homer_Flat-128.png'
+		},
+		{
+			value: 11,
+			category: 'The Simpsons',
+			text: 'Marge Simpson',
+			family: 'Simpson',
+			img: 'https://cdn4.iconfinder.com/data/icons/smashicons-movies-flat/60/49_-_Marge_Flat-128.png'
+		}
+		];
 
-			var cars = [
-				{
-					model: '320i',
-					brand: 'BMW'
-				},
-				{
-					model: 'M300',
-					brand: 'BMW'
-				},
-				{
-					model: 'S500',
-					brand: 'Mercedes'
-				},
-				{
-					model: 'A3',
-					brand: 'Audi'
-				}
-			]
+		var cars = [
+			{
+				model: '320i',
+				brand: 'BMW'
+			},
+			{
+				model: 'M300',
+				brand: 'BMW'
+			},
+			{
+				model: 'S500',
+				brand: 'Mercedes'
+			},
+			{
+				model: 'A3',
+				brand: 'Audi'
+			}
+		]
 	</script>
 
 	<script>
-		var cbSearch = ChooseBumps(document.getElementById('choosebumps-search'),{
+		var cbSearch = ChooseBumps(document.getElementById('choosebumps-search'), {
 			items: content,
-			search:true,
-			onadd: function(val) {
-				console.log('Add: ',val);
+			search: true,
+			onadd: function (val) {
+				console.log('Add: ', val);
 			},
 			searchfields: 'text family',
 			categorize: 'family',
 			placeholder: 'Search...',
 			selectedtemplate: '{{data.value}}',
 			template: '<div class="img" style="background-image:url({{data.img}})"></div><p style="display:inline;">{{data.text}}</p>',
-			onselect: function(item){
+			onselect: function (item) {
 				console.log(item);
 			}
 		});
-		var cbFetchSearch = ChooseBumps(document.getElementById('choosebumps-fetch-search'),{
+		var cbFetchSearch = ChooseBumps(document.getElementById('choosebumps-fetch-search'), {
 			items: 'http://data.brreg.no/enhetsregisteret/enhet.json?$filter=startswith%28navn%2C%27{{query}}%27%29',
-			search:true,
+			search: true,
 			placeholder: 'Search for companies...',
 			noresults: 'Found no results for "{{query}}"',
 			minlength: 2,
-			processing: function(result) {
-				if(!result.data) return [];
-				return result.data.map(function(entry) {
+			processing: function (result) {
+				if (!result.data) return [];
+				return result.data.map(function (entry) {
 					return {
 						name: entry.navn,
 						orgno: entry.organisasjonsnummer,
@@ -244,35 +250,35 @@
 			},
 			template: '{{data.name}} <br><i style="font-size: .8em;opacity: .5;">{{data.homepage}}</i>',
 			selectedtemplate: '{{data.name}}',
-			onselect: function(item){
+			onselect: function (item) {
 				console.log(item);
 			}
 		});
-		var cbTag = ChooseBumps(document.getElementById('choosebumps-tag'),{
+		var cbTag = ChooseBumps(document.getElementById('choosebumps-tag'), {
 			items: cars,
 			multiple: true,
 			placeholder: 'Tag...',
 			categorize: 'brand',
-			onremove: function(item) {
+			onremove: function (item) {
 				console.log('Removed', item);
 			},
 			template: '<p style="display:inline;">{{data.model}}</p>',
 			tagtemplate: '{{data.brand}} {{data.model}}'
 		});
-		var cbTagSearch = ChooseBumps(document.getElementById('choosebumps-tagsearch'),{
+		var cbTagSearch = ChooseBumps(document.getElementById('choosebumps-tagsearch'), {
 			items: content,
 			multiple: true,
-			search:true,
+			search: true,
 			searchfields: 'text',
 			placeholder: 'TagSearch...',
 			template: '<div class="img" style="background-image:url({{data.img}})"></div><p style="display:inline;">{{data.text}}</p>'
 		});
-		var cb = ChooseBumps(document.getElementById('choosebumps'),{
+		var cb = ChooseBumps(document.getElementById('choosebumps'), {
 			items: content,
 			template: '<div class="img" style="background-image:url({{data.img}})"></div><p style="display:inline;">{{data.text}}</p>'
 		});
 
-		var cbCategory = ChooseBumps(document.getElementById('choosebumps-categorisation'),{
+		var cbCategory = ChooseBumps(document.getElementById('choosebumps-categorisation'), {
 			items: content,
 			template: '<div class="img" style="background-image:url({{data.img}})"></div><p style="display:inline;">{{data.text}}</p>',
 			tagtemplate: '{{data.text}}',
@@ -282,4 +288,5 @@
 		});
 	</script>
 </body>
+
 </html>
